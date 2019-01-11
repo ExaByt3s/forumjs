@@ -2,7 +2,6 @@ const db = require('../database/DBCommon');
 const { mkjson, PersonalException, checkFieldInJson } = require('../database/utilities');
 
 /*
-    Subir al git
     Construir el cliente
  */
 
