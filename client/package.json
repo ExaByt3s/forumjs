@@ -9,7 +9,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "electron src"
+    "dev": "electron src/main.js"
   },
   "keywords": [],
   "author": "",

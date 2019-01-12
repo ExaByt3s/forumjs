@@ -1,2 +1,7 @@
 client/node_modules
 server/node_modules
+clientpas/__history
+clientpas/__recovery
+clientpas/Win32
+clientsharp/ForumDev/ForumDevJs/bin
+clientsharp/ForumDev/ForumDevJs/obj
