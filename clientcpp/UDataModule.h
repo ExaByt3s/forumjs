@@ -1,0 +1,31 @@
+//---------------------------------------------------------------------------
+
+#ifndef UDataModuleH
+#define UDataModuleH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Data.Bind.Components.hpp>
+#include <Data.Bind.ObjectScope.hpp>
+#include <REST.Client.hpp>
+#include <REST.Types.hpp>
+#include <memory>
+//---------------------------------------------------------------------------
+
+// using
+using UPtrJSONObject = std::unique_ptr<TJSONObject>;
+
+class TdmData : public TDataModule
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+	
+
+	// methods
+	UPtrJSONObject ExecREST(String method, UPtrJSONObject body);
+public:		// User declarations
+	__fastcall TdmData(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TdmData *dmData;
+//---------------------------------------------------------------------------
+#endif

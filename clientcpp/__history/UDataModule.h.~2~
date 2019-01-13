@@ -1,0 +1,18 @@
+//---------------------------------------------------------------------------
+
+#ifndef UDataModuleH
+#define UDataModuleH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+//---------------------------------------------------------------------------
+class TdmData : public TDataModule
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TdmData(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TdmData *dmData;
+//---------------------------------------------------------------------------
+#endif

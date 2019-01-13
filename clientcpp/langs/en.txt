@@ -1,0 +1,4 @@
+:long_txtusername:=Username
+:login_txtpassword:=Password
+:login_btnstartsession:=Log In
+:login_btnsignin:=Sign In

@@ -1,0 +1,40 @@
+//---------------------------------------------------------------------------
+
+
+#pragma hdrstop
+
+#include "UDataModule.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma classgroup "FMX.Controls.TControl"
+#pragma resource "*.dfm"
+TdmData *dmData;
+//---------------------------------------------------------------------------
+__fastcall TdmData::TdmData(TComponent* Owner)
+	: TDataModule(Owner)
+{
+}
+//---------------------------------------------------------------------------
+
+UPtrJSONObject TdmData::ExecREST(String method, UPtrJSONObject body)
+{
+	std::unique_ptr<TRESTClient> rClient(new TRESTClient(nullptr));
+	std::unique_ptr<TRESTRequest> rRequest(new TRESTRequest(nullptr));
+	std::unique_ptr<TRESTResponse> rResponse(new TRESTResponse(nullptr));
+	rClient->BaseURL = "http://localhost:3000/api/sm/" + method;
+	rRequest->Client = rClient.get();
+	rRequest->Response = rResponse.get();
+	rRequest->Method = rmPOST;
+	rRequest->Timeout = 10000;
+
+	try
+	{
+        rRequest->Execute();
+	}
+	catch (Exception& e)
+	{
+	}
+
+    return std::move(rResponse->JSONValue);
+}
+//---------------------------------------------------------------------------

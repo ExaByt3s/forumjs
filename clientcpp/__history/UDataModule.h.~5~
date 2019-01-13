@@ -1,0 +1,26 @@
+//---------------------------------------------------------------------------
+
+#ifndef UDataModuleH
+#define UDataModuleH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Data.Bind.Components.hpp>
+#include <Data.Bind.ObjectScope.hpp>
+#include <REST.Client.hpp>
+#include <REST.Types.hpp>
+//---------------------------------------------------------------------------
+class TdmData : public TDataModule
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+	TRESTClient *rClient;
+	TRESTRequest *rRequest;
+    TRESTResponse *rResponse;
+
+public:		// User declarations
+	__fastcall TdmData(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TdmData *dmData;
+//---------------------------------------------------------------------------
+#endif
