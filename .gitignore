@@ -1,9 +1,6 @@
 client/node_modules
 server/node_modules
-clientpas/__history
-clientpas/__recovery
-clientpas/controller/__history
-clientpas/controller/__recovery
-clientpas/Win32
-clientsharp/ForumDev/ForumDevJs/bin
-clientsharp/ForumDev/ForumDevJs/obj
+clientcpp/__history
+clientcpp/__recovery
+clientcpp/Win32
+

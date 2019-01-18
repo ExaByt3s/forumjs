@@ -14,3 +14,15 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 {
 }
 //---------------------------------------------------------------------------
+void __fastcall TfrmMain::btnsigninClick(TObject *Sender)
+{
+    tbSignLogin->Next();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::btnstartsession_sClick(TObject *Sender)
+{
+    tbSignLogin->Previous();
+}
+//---------------------------------------------------------------------------
+
