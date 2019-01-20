@@ -8,6 +8,7 @@ object frmMain: TfrmMain
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   Left = 300
   Top = 80
   DesignerMasterStyle = 0
@@ -81,6 +82,8 @@ object frmMain: TfrmMain
               StyleLookup = ''
               TabOrder = 0
               Text = 'TabItem1'
+              ExplicitSize.cx = 8.000000000000000000
+              ExplicitSize.cy = 8.000000000000000000
               object lyPanelLogin: TLayout
                 Align = Center
                 Size.Width = 265.000000000000000000
@@ -99,7 +102,7 @@ object frmMain: TfrmMain
                   Size.Width = 225.000000000000000000
                   Size.Height = 30.000000000000000000
                   Size.PlatformDefault = False
-                  TextPrompt = ':long_txtusername:'
+                  TextPrompt = ':login_txtusername:'
                 end
                 object txtpassword: TEdit
                   Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -127,6 +130,7 @@ object frmMain: TfrmMain
                   Size.PlatformDefault = False
                   TabOrder = 2
                   Text = ':login_btnstartsession:'
+                  OnClick = btnstartsessionClick
                 end
                 object btnsignin: TLabel
                   Align = Bottom
@@ -161,6 +165,8 @@ object frmMain: TfrmMain
               StyleLookup = ''
               TabOrder = 0
               Text = 'TabItem2'
+              ExplicitSize.cx = 8.000000000000000000
+              ExplicitSize.cy = 8.000000000000000000
               object lyPanelSignin: TLayout
                 Align = Center
                 Size.Width = 265.000000000000000000
@@ -322,6 +328,7 @@ object frmMain: TfrmMain
             Size.PlatformDefault = False
             TabOrder = 1
             Text = ':prompt_btnok_prompt:'
+            OnClick = btnok_promptClick
           end
         end
       end

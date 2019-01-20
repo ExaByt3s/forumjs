@@ -13,6 +13,10 @@
 #include <FMX.TabControl.hpp>
 #include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
+
+#include "USLSession.h"
+
+#include <memory>
 //---------------------------------------------------------------------------
 class TfrmMain : public TForm
 {
@@ -50,9 +54,18 @@ __published:	// IDE-managed Components
 
 	void __fastcall btnsigninClick(TObject *Sender);
 	void __fastcall btnstartsession_sClick(TObject *Sender);
+	void __fastcall btnok_promptClick(TObject *Sender);
+	void __fastcall btnstartsessionClick(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
+    std::unique_ptr<SLSession> session;
+
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
+
+	// Methods for comunications with components Views.
+	// This methods pass with __closure
+    void __fastcall cl_Prompt_View(const String& msg);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMain *frmMain;

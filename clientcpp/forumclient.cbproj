@@ -146,8 +146,8 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="DS_std.cpp">
-            <DependentOn>DS_std.h</DependentOn>
+        <CppCompile Include="ExceptionHandler.cpp">
+            <DependentOn>ExceptionHandler.h</DependentOn>
             <BuildOrder>8</BuildOrder>
         </CppCompile>
         <CppCompile Include="forumclient.cpp">
