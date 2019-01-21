@@ -1,5 +1,5 @@
 const db = require('../database/DBCommon');
-const { mkjson, PersonalException, checkFieldInJson } = require('../database/utilities');
+const { PersonalException, checkFieldInJson } = require('../database/utilities');
 
 /*
     Construir el cliente
@@ -15,9 +15,10 @@ const methods = {};
     -4  : JSON Invalid
     -5  : DB empty
     -6  : Incorrect data [login]
+    -7  : User or Email exists [registered]
     -98 : Only for Developers
     -99 : Error query
-    -999 : Invalid json
+    -999 : Connection error
  */
 
 // utils methods return [ boolean, json ]
@@ -66,12 +67,13 @@ methods.login_user = async (req) => {
     try {
         let id = await db.LoginUser([req.body.nickname, req.body.password]);
         let new_token = await db.UpdateUserToken(id);
-        return mkjson({ codError: '0', token: new_token });
+        return { codError: 0, token: new_token };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
         console.error(err);
+        return { codError: -999 };
     }
 }
 
@@ -79,7 +81,6 @@ methods.login_user = async (req) => {
 /*
 Request:
     {
-        range:
         nickname:
         lastname:
         firstname:
@@ -92,21 +93,29 @@ Response:
     }
  */
 methods.register_user = async (req) => {
-    let check = await checkRequestJson(req, ['range','nickname','lastname','firstname','email','password']);
+    let check = await checkRequestJson(req.body, ['nickname','lastname','firstname','email','password']);
     if (!check[0]) return check[1];
-    let result = await db.RegisterUser([
-        req.body.range,
-        req.body.nickname,
-        req.body.lastname,
-        req.body.firstname,
-        req.body.email,
-        req.body.password
-    ]);
-    return result ? mkjson({
-        codError: '0'
-    }) : mkjson({
-        codError: "-1"
-    });
+    try {
+        let result = await db.RegisterUser([
+            req.body.nickname,
+            req.body.lastname,
+            req.body.firstname,
+            req.body.email,
+            req.body.password
+        ]);
+        return result ? {
+            codError: 0
+        } : {
+            codError: -999
+        };
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            console.error(`${err.GetRef()}: ${err.GetMessage()}`);
+            return err.GetExceptionToJson();
+        }
+        console.error(err);
+        return { codError: -999 };
+    }
 }
 
 // Getters methods
@@ -119,9 +128,9 @@ Response:
     }
  */
 methods.get_status = async () => {
-    return mkjson({
-        codError: '0'
-    });
+    return {
+        codError: 0
+    };
 }
 
 /*
@@ -152,12 +161,12 @@ methods.get_allusers = async (req) => {
     if (!check[0]) return check[1];
     try {
         let rows = await db.GetAllUsers();
-        return mkjson({ codError: '0', data: rows });
+        return { codError: 0, data: rows };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
-        return mkjson({ codError: '-99' })
+        return { codError: -99 };
     }
 }
 
@@ -191,12 +200,12 @@ methods.get_user = async (req) => {
     if (!check[0]) return check[1];
     try {
         let rows = await db.GetUserById(req.body.req_id);
-        return mkjson({ codError: '0', data: rows });;
+        return { codError: 0, data: rows };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
-        return mkjson({ codError: '-2' });
+        return { codError: -2 };
     }
 }
 
@@ -216,11 +225,11 @@ methods.delete_all_info = async (req) => {
     if (!check[0]) return check[1];
 
     if (req.body.secret_key != 'nganga') {
-        return mkjson({ codError: '-98' });
+        return { codError: -98 };
     }
 
     let result = await db.ClearTables();
-    return result ? mkjson({ codError: '0' }) : mkjson({ codError: '-99' });
+    return result ? { codError: 0 } : { codError: -99 };
 }
 
 module.exports = methods;

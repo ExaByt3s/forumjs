@@ -24,10 +24,6 @@ function GenerateToken(id) {
     return token;
 }
 
-function mkjson(obj) {
-    return JSON.stringify(obj);
-}
-
 class PersonalException {
     constructor(msg, ref_fn, cerror) {
         this.excp = {
@@ -46,7 +42,7 @@ class PersonalException {
     }
 
     GetExceptionToJson() {
-        return mkjson({ codError: this.excp.codError });
+        return { codError: this.excp.codError };
     }
 }
 
@@ -62,7 +58,7 @@ function checkFieldInJson(body, fields) {
 
 module.exports = {
     // funcs 
-    GenerateToken, mkjson, DateToMysqlFormat, checkFieldInJson, 
+    GenerateToken, DateToMysqlFormat, checkFieldInJson, 
     // classes
     PersonalException 
 };

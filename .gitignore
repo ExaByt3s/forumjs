@@ -1,2 +1,5 @@
-client/node_modules
-server/node_modules
+client
+clientcpp/__history
+clientcpp/__recovery
+clientcpp/Win32
+

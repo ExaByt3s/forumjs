@@ -4,11 +4,12 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "electron": "^4.0.1",
     "electron-prebuilt": "^1.4.13"
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "electron src"
+    "dev": "electron src/main.js"
   },
   "keywords": [],
   "author": "",

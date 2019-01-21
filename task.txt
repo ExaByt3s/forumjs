@@ -1,0 +1,5 @@
+SERVER:
+
+CLIENT:
+2) Gestionar el proceso de registro.
+E ir pensando el procesado de hilos en la aplicacion.

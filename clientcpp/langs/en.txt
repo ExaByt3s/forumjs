@@ -1,0 +1,7 @@
+:login_txtusername:=Username
+:login_txtpassword:=Password
+:login_btnstartsession:=Log In
+:login_btnsignin:=Sign In
+:signin_txtemail:=Email
+:signin_txtpassconfirm_s:=Again Password
+:prompt_btnok_prompt:=OK
