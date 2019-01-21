@@ -1,3 +1,8 @@
+*.pch
+*.obj
+*.dfm.*
+*.cpp.*
+
 client
 clientcpp/__history
 clientcpp/__recovery
