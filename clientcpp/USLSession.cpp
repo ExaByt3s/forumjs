@@ -26,9 +26,7 @@ bool SLSession::StartSession(refStr nickname, refStr password)
 	}
 	catch (ExceptionHandler& e)
 	{
-		#ifdef _DEBUG
-        e.ShowMsgException();
-		#endif
+	//	e.ShowMsgException();
         fn_prompt(e.ProcessCodError());
         return false;
 	}

@@ -41,7 +41,7 @@ String ExceptionHandler::ProcessCodError()
 			msg = "";
 			break;
 		case INCORRECT_DATA:
-			msg = "";
+			msg = "Datos incorrectos!";
 			break;
 		case ONLY_FOR_DEVELOPERS:
 			msg = "";
@@ -59,12 +59,10 @@ String ExceptionHandler::ProcessCodError()
     return msg;
 }
 
-#ifdef _DEBUG
 void ExceptionHandler::ShowMsgException()
 {
 	ShowMessage("Method: " + method +
 				"\nCodError: " + codError +
 				"\nMessage: " + ProcessCodError());
 }
-#endif
 

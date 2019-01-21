@@ -13,9 +13,7 @@ public:
     ExceptionHandler();
 	ExceptionHandler(int CodError, refUStr Method);
 
-#ifdef _DEBUG
-    void ShowMsgException();
-#endif
+	void ShowMsgException();
     String ProcessCodError();
 private:
 	int codError;

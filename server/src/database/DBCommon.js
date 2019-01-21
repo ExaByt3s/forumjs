@@ -55,26 +55,32 @@ class DBCommon
     // register
     async RegisterUser(args) {
         /* Args
-            [0] = range         1 = user, 2 = moderator, 3 = advertise, 4 = developer, 5 = administrator, 6 = owned
-            [1] = nickname
-            [2] = lastname
-            [3] = firstname
-            [4] = email
-            [5] = password      hash 512 (128 length)
+            [-0-] = range         1 = user, 2 = moderator, 3 = advertise, 4 = developer, 5 = administrator, 6 = owned
+            [0] = nickname
+            [1] = lastname
+            [2] = firstname
+            [3] = email
+            [4] = password      hash 512 (128 length)
          */
         try {
+            // check user existen
+            if (!((await this.GetUserIdByEmail(args[3], true)) == -1) || 
+                !((await this.GetUserIdByNickname(args[0], true)) == -1)) {
+                throw new PersonalException(`User or Email exists`, 'RegisterUser', '-7');
+            }
+
             let query = "INSERT INTO `accounts`(`range`,`nickname`,`lastname`,`firstname`,`email`) " + 
-                    "VALUES(" + args[0] + ",'" +
-                                args[1] + "','" +
-                                args[2] + "','" + 
-                                args[3] + "','" +
-                                args[4] + "');";
+                    "VALUES(" + 1 + ",'" +
+                                args[0] + "','" +
+                                args[1] + "','" + 
+                                args[2] + "','" +
+                                args[3] + "');";
         
             await this.ExecQry(query);
 
-            let id = await this.GetUserIdByEmail(args[4]);
+            let id = await this.GetUserIdByEmail(args[3]);
             let token = GenerateToken(id);
-            let pass_encrypt = secure.mkHashSHA512(args[5]);
+            let pass_encrypt = secure.mkHashSHA512(args[4]);
             query = "INSERT INTO `login`(`ac_id`,`password`,`token`,`lastlog`) " +
                     "VALUES(" + id + ",'" +
                                 pass_encrypt + "','" +
@@ -84,8 +90,11 @@ class DBCommon
             await this.ExecQry(query);
             return true;
         } catch (err) {
-            console.error(err);
-            return false;
+            if (!(err instanceof PersonalException)) {
+                console.error(err);
+                return false;
+            }
+            throw err;
         }
     }
 
@@ -134,13 +143,38 @@ class DBCommon
         }
     }
 
-    async GetUserIdByEmail(email) {
+    async GetUserIdByEmail(email, for_checked) {
         try {
             if (!email) throw "know't";
             let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `email` = '" + email + "';");
-            if (!rows.length)
-                throw new PersonalException(`Not found id in this email: ${email}.`, 'GetUserIdByEmail', '-2');
-            return rows[0].acc_id;
+            if (!rows.length) {
+                if (!for_checked)
+                    throw new PersonalException(`Not found id in this email: ${email}.`, 'GetUserIdByEmail', '-2');
+                else
+                    return -1; // no existe
+            } else {
+                return rows[0].acc_id;
+            }
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetUserIdByNickname(nickname, for_checked) {
+        try {
+            if (!nickname) throw "know't";
+            let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `nickname` = '" + nickname + "';");
+            if (!rows.length) {
+                if (!for_checked)
+                    throw new PersonalException(`Not found id in this nickname: ${nickname}.`, 'GetUserIdByNickname', '-2');
+                else
+                    return -1;  // no existe
+            } else {
+                return rows[0].acc_id;
+            }
         } catch (err) {
             if (!(err instanceof PersonalException)) {
                 throw "know't";

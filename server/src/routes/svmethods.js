@@ -15,6 +15,7 @@ const methods = {};
     -4  : JSON Invalid
     -5  : DB empty
     -6  : Incorrect data [login]
+    -7  : User or Email exists [registered]
     -98 : Only for Developers
     -99 : Error query
     -999 : Connection error
@@ -72,6 +73,7 @@ methods.login_user = async (req) => {
             return err.GetExceptionToJson();
         }
         console.error(err);
+        return { codError: -999 };
     }
 }
 
@@ -79,7 +81,6 @@ methods.login_user = async (req) => {
 /*
 Request:
     {
-        range:
         nickname:
         lastname:
         firstname:
@@ -92,21 +93,29 @@ Response:
     }
  */
 methods.register_user = async (req) => {
-    let check = await checkRequestJson(req, ['range','nickname','lastname','firstname','email','password']);
+    let check = await checkRequestJson(req.body, ['nickname','lastname','firstname','email','password']);
     if (!check[0]) return check[1];
-    let result = await db.RegisterUser([
-        req.body.range,
-        req.body.nickname,
-        req.body.lastname,
-        req.body.firstname,
-        req.body.email,
-        req.body.password
-    ]);
-    return result ? {
-        codError: 0
-    } : {
-        codError: -1
-    };
+    try {
+        let result = await db.RegisterUser([
+            req.body.nickname,
+            req.body.lastname,
+            req.body.firstname,
+            req.body.email,
+            req.body.password
+        ]);
+        return result ? {
+            codError: 0
+        } : {
+            codError: -999
+        };
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            console.error(`${err.GetRef()}: ${err.GetMessage()}`);
+            return err.GetExceptionToJson();
+        }
+        console.error(err);
+        return { codError: -999 };
+    }
 }
 
 // Getters methods

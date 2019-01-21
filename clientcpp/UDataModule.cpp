@@ -36,16 +36,12 @@ UPtrJSONObject TdmData::ExecREST(String method, const UPtrJSONObject& body)
 	try
 	{
 		rRequest->Execute();
-		ShowMessage(rResponse->JSONValue->ToString());
-		TJSONObject *resobj = dynamic_cast<TJSONObject*>(rResponse->JSONValue->Clone());
-		/*if (!rResponse->JSONValue->TryGetValue<int>(u"codError", codError))
+		if (!rResponse->JSONValue->TryGetValue<int>("codError", codError))
 		{
 			throw new Exception("Invalid server response");
-		}  */
+		}
 
-        ShowMessage(resobj->GetValue("codError")->Value());
-
-		//TJSONObject *resobj = dynamic_cast<TJSONObject*>(rResponse->JSONValue->Clone());
+		TJSONObject *resobj = dynamic_cast<TJSONObject*>(rResponse->JSONValue->Clone());
 		UPtrJSONObject resptr(resobj);
 		return std::move(resptr);
 	}
@@ -80,11 +76,37 @@ bool TdmData::Login(const String& nickname, const String& password)
 	}
 	catch (ExceptionHandler& e)
 	{
-		#ifdef _DEBUG
-        e.ShowMsgException();
-		#endif
-        throw ExceptionHandler(codError, "TdmData::Login");
+		throw ExceptionHandler(codError, "TdmData::Login");
     }
+}
+//---------------------------------------------------------------------------
+
+bool TdmData::SignIn(int range, refStr nickname, refStr lastname,
+						refStr firstname, refStr email, refStr password)
+{
+    UPtrJSONObject body(new TJSONObject());
+	UPtrJSONObject res;
+	String pass = MakeHash512(password);
+	body->AddPair("range", range);
+	body->AddPair("nickname", nickname.LowerCase());
+	body->AddPair("lastname", lastname.LowerCase());
+	body->AddPair("firstname", firstname.LowerCase());
+	body->AddPair("email", email);
+	body->AddPair("password", pass);
+	res.reset(ExecREST("signin", body).release());
+	int codError = StrToInt(res->GetValue("codError")->Value());
+
+	try
+	{
+        if (codError)
+			throw ExceptionHandler();
+
+		return true;
+	}
+	catch (ExceptionHandler& e)
+	{
+		throw ExceptionHandler(codError, "TdmData::SignIn");
+	}
 }
 //---------------------------------------------------------------------------
 

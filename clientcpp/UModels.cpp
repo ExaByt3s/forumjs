@@ -8,6 +8,7 @@
 
 User::User()
 	: id{0}
+	, range{0}
 	, nickname{""}
 	, password{""}
 	, email{""}
@@ -17,7 +18,8 @@ User::User()
 
 User::User(const User& user)
 {
-    id = user.id;
+	id = user.id;
+	range = user.range;
 	nickname = user.nickname;
 	password = user.password;
 	email = user.email;
@@ -27,14 +29,16 @@ User::User(const User& user)
 User::User(User&& user)
 {
 	id = user.id;
+	range = user.range;
 	nickname = user.nickname;
 	password = user.password;
 	email = user.email;
 	token = user.token;
 }
 
-User::User(unsigned id, String nname, String pass, String em, String tk)
+User::User(unsigned id, int range, refStr nname, refStr pass, refStr em, refStr tk)
 	: id{id}
+	, range{range}
 	, nickname{nname}
 	, password{pass}
 	, email{em}
@@ -45,6 +49,7 @@ User::User(unsigned id, String nname, String pass, String em, String tk)
 User& User::operator=(const User& user)
 {
 	id = user.id;
+	range = user.range;
 	nickname = user.nickname;
 	password = user.password;
 	email = user.email;
@@ -54,7 +59,8 @@ User& User::operator=(const User& user)
 
 User& User::operator=(User&& user)
 {
-    id = user.id;
+	id = user.id;
+    range = user.range;
 	nickname = user.nickname;
 	password = user.password;
 	email = user.email;
