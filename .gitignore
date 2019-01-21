@@ -3,7 +3,6 @@
 *.dfm.*
 *.cpp.*
 
-client
 clientcpp/__history
 clientcpp/__recovery
 clientcpp/Win32
