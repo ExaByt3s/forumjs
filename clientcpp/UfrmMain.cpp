@@ -8,6 +8,7 @@
 // views
 #include "UfrmLogin.h"
 #include "UfrmApp.h"
+#include "UUtilities.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.fmx"
@@ -36,31 +37,9 @@ void __fastcall TfrmMain::btnok_promptClick(TObject *Sender)
 
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
-	//session.reset(new SLSession(&cl_Prompt_View));
-	GetView(__classid(TfrmLogin), lyRight);
+	GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyRight");
 	SLSession::Session->fn_prompt = &cl_Prompt_View;
 	ViewsBase::viewsBase->fn_dispatch = &cl_Dispatch_Event;
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmMain::GetView(const TComponentClass aForm, TLayout *Parent)
-{
-	if ((FActiveForm != nullptr) &&
-		(FActiveForm->ClassName != aForm->ClassName))
-	{
-        Parent->Children->DisposeOf();
-        /*
-		for (int i = Parent->ControlsCount - 1; i >= 0; --i)
-		{
-			Parent->RemoveObject(Parent->Controls[i]);
-		} */
-	}
-
-	FActiveForm->DisposeOf();
-	FActiveForm = nullptr;
-
-	Application->CreateForm(aForm, &FActiveForm);
-    Parent->AddObject(dynamic_cast<TLayout*>(FActiveForm->FindComponent("lyViewLayout")));
 }
 //---------------------------------------------------------------------------
 
@@ -71,9 +50,16 @@ void __fastcall TfrmMain::cl_Dispatch_Event(EventViews ev)
 	case START_SESSION:
 	{
 		tbMain->GotoVisibleTab(1);
-        GetView(__classid(TfrmApp), lyApplication);
+        GetView(__classid(TfrmApp), lyApplication, FActiveForm, "lyApplication");
 	} break;
 	}
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::btnQuitClick(TObject *Sender)
+{
+    exit(0);
+}
+//---------------------------------------------------------------------------
+
 

@@ -27,8 +27,6 @@ __published:	// IDE-managed Components
 	TTabControl *tbMain;
 	TTabItem *tbiLogin;
 	TTabItem *tbiApplication;
-	TLayout *lyLeft;
-	TLayout *lyRight;
 	// Prompt View
 	TRectangle *rtcBackground;
 	TLayout *lyMainPrompt;
@@ -36,9 +34,13 @@ __published:	// IDE-managed Components
 	TLabel *lblmessage_prompt;
 	TButton *btnok_prompt;
 	TLayout *lyApplication;
+	TToolBar *tbTool;
+	TButton *btnQuit;
+	TLayout *lyLogin;
 
 	void __fastcall btnok_promptClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall btnQuitClick(TObject *Sender);
 private:	// User declarations
 	//std::unique_ptr<SLSession> session;
 	// Views manager
@@ -46,9 +48,6 @@ private:	// User declarations
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
-
-	// Get views
-	void __fastcall GetView(const TComponentClass aForm, TLayout *Parent);
 
 	// Methods for comunications with components Views.
 	// This methods pass with __closure

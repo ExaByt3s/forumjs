@@ -13,3 +13,19 @@ String MakeHash512(const String& text)
 		THashSHA2::TSHA2Version::SHA512).LowerCase();
 }
 
+void __fastcall GetView(const TComponentClass aForm, TLayout *Parent,
+						TForm *ref, const String& component)
+{
+	if ((ref != nullptr) &&
+		(ref->ClassName != aForm->ClassName))
+	{
+        Parent->Children->DisposeOf();
+	}
+
+	ref->DisposeOf();
+	ref = nullptr;
+
+	Application->CreateForm(aForm, &ref);
+	Parent->AddObject(dynamic_cast<TLayout*>(ref->FindComponent(component)));
+}
+

@@ -36,6 +36,8 @@ __published:	// IDE-managed Components
 	TLayout *Layout1;
 	TEdit *txtfn_s;
 	TEdit *txtln_s;
+	TLayout *lyLeft;
+	TLayout *lyRight;
 	void __fastcall btnsigninClick(TObject *Sender);
 	void __fastcall btnstartsession_sClick(TObject *Sender);
 	void __fastcall btnstartsessionClick(TObject *Sender);

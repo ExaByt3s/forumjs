@@ -4,6 +4,8 @@
 #define UUtilitiesH
 
 #include <System.Classes.hpp>
+#include <FMX.Forms.hpp>
+#include <FMX.Layouts.hpp>
 //---------------------------------------------------------------------------
 
 // CODE ERRORS
@@ -25,5 +27,9 @@ enum CODE_ERROR
 
 // Hash 512
 String MakeHash512(const String& text);
+
+// Get Views
+void __fastcall GetView(const TComponentClass aForm, TLayout *Parent,
+						TForm *ref, const String& component);
 
 #endif
