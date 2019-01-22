@@ -15,6 +15,7 @@
 #include <FMX.Objects.hpp>
 
 #include "USLSession.h"
+#include "UViewsBase.h"
 
 #include <memory>
 //---------------------------------------------------------------------------
@@ -28,44 +29,31 @@ __published:	// IDE-managed Components
 	TTabItem *tbiApplication;
 	TLayout *lyLeft;
 	TLayout *lyRight;
-	// Login View
-	TLayout *lyPanelLogin;
-	TEdit *txtusername;
-	TEdit *txtpassword;
-	TButton *btnstartsession;
-	TLabel *btnsignin;
-	TTabControl *tbSignLogin;
-	TTabItem *tbi_Login;
-	TTabItem *tbi_Signin;
-	// Singin View
-	TLayout *lyPanelSignin;
-	TEdit *txtusername_s;
-	TEdit *txtemail_s;
-	TEdit *txtpassword_s;
-	TEdit *txtpassconfirm_s;
-	TButton *btnsignin_s;
-    TLabel *btnstartsession_s;
 	// Prompt View
 	TRectangle *rtcBackground;
 	TLayout *lyMainPrompt;
 	TRectangle *rctBack_end;
 	TLabel *lblmessage_prompt;
 	TButton *btnok_prompt;
+	TLayout *lyApplication;
 
-	void __fastcall btnsigninClick(TObject *Sender);
-	void __fastcall btnstartsession_sClick(TObject *Sender);
 	void __fastcall btnok_promptClick(TObject *Sender);
-	void __fastcall btnstartsessionClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
-    std::unique_ptr<SLSession> session;
+	//std::unique_ptr<SLSession> session;
+	// Views manager
+	TForm *FActiveForm;
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 
+	// Get views
+	void __fastcall GetView(const TComponentClass aForm, TLayout *Parent);
+
 	// Methods for comunications with components Views.
 	// This methods pass with __closure
-    void __fastcall cl_Prompt_View(const String& msg);
+	void __fastcall cl_Prompt_View(const String& msg);
+	void __fastcall cl_Dispatch_Event(EventViews ev);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMain *frmMain;

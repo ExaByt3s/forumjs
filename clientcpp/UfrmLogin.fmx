@@ -1,0 +1,258 @@
+object frmLogin: TfrmLogin
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 320
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object lyViewLayout: TLayout
+    Align = Client
+    Size.Width = 320.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbLogSign: TTabControl
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      TabIndex = 0
+      TabOrder = 0
+      TabPosition = None
+      Sizes = (
+        320s
+        480s
+        320s
+        480s)
+      object tbiLogin: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lyPanelLogin: TLayout
+          Align = Center
+          Margins.Top = 100.000000000000000000
+          Size.Width = 280.000000000000000000
+          Size.Height = 210.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object txtusername: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 0
+            Text = 'admin'
+            Position.X = 40.000000000000000000
+            Position.Y = 3.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 30.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':login_txtusername:'
+          end
+          object txtpassword: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 1
+            Text = 'admin'
+            Position.X = 40.000000000000000000
+            Position.Y = 63.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 50.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':login_txtpassword:'
+          end
+          object btnstartsession: TButton
+            Align = Bottom
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Position.X = 40.000000000000000000
+            Position.Y = 143.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = ':login_btnstartsession:'
+            OnClick = btnstartsessionClick
+          end
+          object btnsignin: TLabel
+            Align = Bottom
+            Cursor = crHandPoint
+            StyledSettings = [Family, Size]
+            HitTest = True
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Position.X = 40.000000000000000000
+            Position.Y = 193.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {04040000000000000004000000}
+            TextSettings.FontColor = claRoyalblue
+            TextSettings.HorzAlign = Center
+            Text = ':login_btnsignin:'
+            TabOrder = 3
+            OnClick = btnsigninClick
+          end
+        end
+      end
+      object tbiSignin: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem2'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lySiginPanel: TLayout
+          Align = Center
+          Size.Width = 280.000000000000000000
+          Size.Height = 350.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object txtusername_s: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 0
+            Position.X = 40.000000000000000000
+            Position.Y = 13.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':login_txtusername:'
+          end
+          object txtemail_s: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 2
+            Position.X = 40.000000000000000000
+            Position.Y = 113.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':signin_txtemail:'
+          end
+          object txtpassword_s: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 3
+            Position.X = 40.000000000000000000
+            Position.Y = 163.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':login_txtpassword:'
+          end
+          object txtpassconfirm_s: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Align = Bottom
+            TabOrder = 4
+            Position.X = 40.000000000000000000
+            Position.Y = 213.000000000000000000
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 40.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TextPrompt = ':signin_txtpassconfirm_s:'
+          end
+          object btnsignin_s: TButton
+            Align = Bottom
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Position.X = 40.000000000000000000
+            Position.Y = 283.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 5
+            Text = ':login_btnsignin:'
+            OnClick = btnsignin_sClick
+          end
+          object btnstartsession_s: TLabel
+            Align = Bottom
+            Cursor = crHandPoint
+            StyledSettings = [Family, Size]
+            HitTest = True
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Position.X = 40.000000000000000000
+            Position.Y = 333.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.StyleExt = {04040000000000000004000000}
+            TextSettings.FontColor = claRoyalblue
+            TextSettings.HorzAlign = Center
+            Text = ':login_btnstartsession:'
+            TabOrder = 6
+            OnClick = btnstartsession_sClick
+          end
+          object Layout1: TLayout
+            Align = Bottom
+            Margins.Left = 40.000000000000000000
+            Margins.Right = 40.000000000000000000
+            Margins.Bottom = 20.000000000000000000
+            Position.X = 40.000000000000000000
+            Position.Y = 63.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            object txtfn_s: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Left
+              TabOrder = 0
+              Size.Width = 100.000000000000000000
+              Size.Height = 30.000000000000000000
+              Size.PlatformDefault = False
+              TextPrompt = ':signin_txtfn_s:'
+            end
+            object txtln_s: TEdit
+              Touch.InteractiveGestures = [LongTap, DoubleTap]
+              Align = Right
+              TabOrder = 1
+              Position.X = 100.000000000000000000
+              Size.Width = 100.000000000000000000
+              Size.Height = 30.000000000000000000
+              Size.PlatformDefault = False
+              TextPrompt = ':sigin_txtln_s:'
+            end
+          end
+        end
+      end
+    end
+  end
+end

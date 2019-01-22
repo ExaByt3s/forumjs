@@ -81,13 +81,12 @@ bool TdmData::Login(const String& nickname, const String& password)
 }
 //---------------------------------------------------------------------------
 
-bool TdmData::SignIn(int range, refStr nickname, refStr lastname,
+bool TdmData::SignIn(refStr nickname, refStr lastname,
 						refStr firstname, refStr email, refStr password)
 {
     UPtrJSONObject body(new TJSONObject());
 	UPtrJSONObject res;
 	String pass = MakeHash512(password);
-	body->AddPair("range", range);
 	body->AddPair("nickname", nickname.LowerCase());
 	body->AddPair("lastname", lastname.LowerCase());
 	body->AddPair("firstname", firstname.LowerCase());

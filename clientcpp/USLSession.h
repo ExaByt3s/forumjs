@@ -8,19 +8,22 @@
 //---------------------------------------------------------------------------
 
 // closure for views
-typedef void __fastcall(__closure *_Prompt_View)(const String&);
+using _Prompt_View = void __fastcall(__closure *)(const String&);
 
 class SLSession
 {
     using refStr = const String&;
 public:
-	SLSession(_Prompt_View fn);
+    static SLSession *Session;
+	SLSession();
 	~SLSession();
 
 	bool StartSession(refStr nickname, refStr password);
+	bool RegisterUser(refStr nickname, refStr lastname,
+				  refStr firstname, refStr email, refStr password);
 
-private:
-    _Prompt_View fn_prompt;
+    // closures
+	_Prompt_View fn_prompt;
 };
 
 #endif

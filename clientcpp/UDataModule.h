@@ -31,7 +31,7 @@ public:		// User declarations
 
     // Login & Signin
 	bool Login(const String& nickname, const String& password);
-	bool SignIn(int range, refStr nickname, refStr lastname,
+	bool SignIn(refStr nickname, refStr lastname,
 				  refStr firstname, refStr email, refStr password);
 };
 //---------------------------------------------------------------------------

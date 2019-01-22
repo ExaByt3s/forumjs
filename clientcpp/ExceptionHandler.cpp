@@ -26,31 +26,34 @@ String ExceptionHandler::ProcessCodError()
     switch (codError)
 	{
 		case ERROR_TOKEN:
-			msg = "";
+			msg = "Error token!";
 			break;
 		case USER_NOT_FOUND:
-			msg = "";
+			msg = "User not found!";
 			break;
 		case DATA_INCOMPLENT:
-			msg = "";
+			msg = "Data incompleta!";
 			break;
 		case JSON_INVALID:
-			msg = "";
+			msg = "JSON Invalid!";
 			break;
 		case DB_EMPTY:
-			msg = "";
+			msg = "DB empty!";
 			break;
 		case INCORRECT_DATA:
 			msg = "Datos incorrectos!";
 			break;
+		case USER_EMAIL_EXISTS:
+			msg = "User or Email Exists!";
+			break;
 		case ONLY_FOR_DEVELOPERS:
-			msg = "";
+			msg = "Only for Developers!";
 			break;
 		case ERROR_QUERY:
-			msg = "";
+			msg = "Error Query!";
 			break;
-        case CONNECTION_ERROR:
-			msg = "";
+		case CONNECTION_ERROR:
+			msg = "Connection Error!";
 			break;
 		default:
 			msg = "Unknow";

@@ -127,6 +127,8 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <LinkPackageImports>rtl.bpi;fmx.bpi;bindcomp.bpi;dbrtl.bpi;bindengine.bpi;RESTComponents.bpi;CustomIPTransport.bpi;IndyIPClient.bpi;IndyIPCommon.bpi;IndySystem.bpi;IndyProtocols.bpi;IndyCore.bpi</LinkPackageImports>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -164,6 +166,18 @@
             <DependentOn>UDataModule.h</DependentOn>
             <BuildOrder>3</BuildOrder>
         </CppCompile>
+        <CppCompile Include="UfrmApp.cpp">
+            <Form>frmApp</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>UfrmApp.h</DependentOn>
+            <BuildOrder>11</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="UfrmLogin.cpp">
+            <Form>frmLogin</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>UfrmLogin.h</DependentOn>
+            <BuildOrder>9</BuildOrder>
+        </CppCompile>
         <CppCompile Include="UfrmMain.cpp">
             <Form>frmMain</Form>
             <FormType>fmx</FormType>
@@ -186,8 +200,14 @@
             <DependentOn>UUtilities.h</DependentOn>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
+        <CppCompile Include="UViewsBase.cpp">
+            <DependentOn>UViewsBase.h</DependentOn>
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
         <FormResources Include="UfrmMain.fmx"/>
         <FormResources Include="UDataModule.dfm"/>
+        <FormResources Include="UfrmLogin.fmx"/>
+        <FormResources Include="UfrmApp.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -214,6 +234,12 @@
                 <Source>
                     <Source Name="MainSource">forumclient.cpp</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k250.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp250.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </CPlusPlusBuilder.Personality>
             <Deployment Version="3">
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32c260.dll" Class="DependencyModule">
