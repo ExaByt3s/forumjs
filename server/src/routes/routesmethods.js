@@ -26,6 +26,20 @@ svm_router.post('/getuser', async (req, res) => {
     res.json(await svm.get_user(req));
 });
 
+// articles
+svm_router.post('/pusharticle', async (req, res) => {
+    res.json(await svm.push_article(req));
+});
+
+// getters articles
+svm_router.post('/getarticles', async (req, res) => {
+    res.json(await svm.get_articles(req));
+});
+
+svm_router.post('/getarticle', async (req, res) => {
+    res.json(await svm.get_articles(req));
+});
+
 // in dev
 svm_router.post('/reset_db', async (req, res) => {
     res.json(await svm.delete_all_info(req));

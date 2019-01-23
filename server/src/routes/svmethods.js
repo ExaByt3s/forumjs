@@ -1,5 +1,8 @@
 const db = require('../database/DBCommon');
-const { PersonalException, checkFieldInJson } = require('../database/utilities');
+const { PersonalException, checkFieldInJson } = require('../lib/utilities');
+const sec = ('../lib/secure_utils');
+const path = require('path');
+const uuid = require('uuid/v5');
 
 /*
     Construir el cliente
@@ -16,6 +19,9 @@ const methods = {};
     -5  : DB empty
     -6  : Incorrect data [login]
     -7  : User or Email exists [registered]
+    -8  : Article not found
+    -9  : Article not have likes
+    -10 : Articles empty
     -98 : Only for Developers
     -99 : Error query
     -999 : Connection error
@@ -205,7 +211,156 @@ methods.get_user = async (req) => {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
-        return { codError: -2 };
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        ac_id: propietario de la publicacion
+        range: default(1)
+        title:
+        description:
+        image_p: base64
+        image_name: 
+    }
+Response:
+    {
+        codError:
+    }
+*/
+methods.push_article = async (req) => {
+    let check = await checkRequestJson(req.body, 
+        ['ac_id','range','title','description','image_p','image_name']);
+    if (!check[0]) return check[1];
+    try {
+        let uuid_img = ''; 
+        let ext; 
+        if (image_p != '') {
+            uuid_img = uuid(req.body.image_name, uuid.URL);
+            ext = path.extname(req.body.image_name);
+            sec.base64_decode(req.body.image_p, path.join(
+                __dirname + 'storage/images/articles/' + uuid_img + ext));
+        }
+        let result = await db.PushArticle([
+            req.body.ac_id,
+            req.body.range,
+            req.body.title,
+            req.body.description,
+            uuid_img
+        ]);
+        return result ? {
+            codError: 0
+        } : {
+            codError: -999
+        };
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        id:
+        offset:
+        token: 
+    }
+Response:
+    {
+        codError:
+        data: [
+            {
+                a_id:
+                ac_id:
+                range:
+                title:
+                description:
+                imagebase64:
+                create_at:
+            }
+        ]
+    }
+*/
+methods.get_articles = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','offset']);
+    if (!check[0]) return check[1];
+    //check = await checkToken(req.body);
+    //if (!check[0]) return check[1];
+    try {
+        let rows = await db.GetArticles(req.body.offset);
+        let arr_data = [];
+        for (let row of rows) {
+            arr_data.push({
+                ar_id: row.ar_id,
+                ac_id: row.ac_id,
+                range: row.range,
+                title: row.title,
+                description: row.description,
+                imagebase64: sec.base64_encode(row.image_p),
+                create_at: row.create_at
+            });
+        }
+        return { codError: 0, data: arr_data };
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        id:
+        ar_id:
+        token:
+    }
+Response:
+    {
+        codError:
+        data: [ 
+            {
+                ar_id:
+                ac_id:
+                range:
+                title:
+                description:
+                imagebase64:
+                create_at:
+            }
+        ]
+    }
+*/
+methods.get_articles = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','ar_id']);
+    if (!check[0]) return check[1];
+    //check = await checkToken(req.body);
+    //if (!check[0]) return check[1];
+    try {
+        let rows = await db.GetArticleById(req.body.ar_id);
+        let arr_data = [];
+        for (let row of rows) {
+            arr_data.push({
+                ar_id: row.a_id,
+                ac_id: row.ac_id,
+                range: row.range,
+                title: row.title,
+                description: row.description,
+                imagebase64: sec.base64_encode(row.image_p),
+                create_at: row.create_at
+            });
+        }
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        return { codError: -999 };
     }
 }
 

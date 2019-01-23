@@ -10,10 +10,13 @@ class Server {
     }
 
     Settings() {
+        // settings
+
         // Middleware
         this.app.use(morgan("dev"));
         this.app.use(bodyparse.urlencoded({ extended: false }));
         this.app.use(bodyparse.json());
+
 
         // Router
         this.app.use(require('./routes/'));

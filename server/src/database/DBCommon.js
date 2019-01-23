@@ -1,7 +1,7 @@
 const mysql = require('promise-mysql');
 const config_db = require('./db_config');
-const { GenerateToken, DateToMysqlFormat, PersonalException } = require('./utilities');
-const secure = require('./secure_utils');
+const { GenerateToken, DateToMysqlFormat, PersonalException } = require('../lib/utilities');
+const secure = require('../lib/secure_utils');
 
 class DBCommon
 {
@@ -98,6 +98,34 @@ class DBCommon
         }
     }
 
+    // articles
+    async PushArticle(args) {
+        /* Args
+            [0] = account id
+            [1] = range         1 = user, 2 = moderator, 3 = advertise, 4 = developer, 5 = administrator, 6 = owned
+            [2] = title
+            [3] = description
+            [4] = image_p
+         */
+        try {
+            let query = "INSERT INTO `articles`(`ac_id`,`range`,title`,`description`,`image_p`) " + 
+                    "VALUES(" + args[0] + "," +
+                                args[1] + ",'" +
+                                args[2] + "','" + 
+                                args[3] + "','" +
+                                args[4] + "');";
+            
+            await this.ExecQry(query);
+            return true;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                console.error(err);
+                return false;
+            }
+            throw err;
+        }
+    }
+
     // Gets
     async GetAllUsers() {
         try {
@@ -175,6 +203,53 @@ class DBCommon
             } else {
                 return rows[0].acc_id;
             }
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    // Gets for Articles
+    async GetArticles(offset) {
+        try {
+            if (!offset) throw "know't";
+            let rows = await this.ExecQry("SELECT * FROM `article` WHERE `ar_id` < " + offset + 
+                                          " ORDER BY `li_id` DESC;");
+            if (!rows.length)
+                throw new PersonalException(`Empty articles.`, 'GetArticles', '-10');
+            return rows;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetArticleById(id_article) {
+        try {
+            if (!id_article) throw "know't";
+            let rows = await this.ExecQry("SELECT * FROM `article` WHERE `ar_id` = " + id_article + ";");
+            if (!rows.length)
+                throw new PersonalException(`Not found article id: ${id}.`, 'GetArticle', '-8');
+            return rows[0];
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetArticleLikes(id_article) {
+        try {
+            if (!id_article) throw "know't";
+            let rows = await this.ExecQry("SELECT * FROM `likes` WHERE `ar_id` = " + id_article + ";");
+            if (!rows.length)
+                throw new PersonalException(`Not found article id: ${id}.`, 'GetArticle', '-9');
+            return rows.length;
         } catch (err) {
             if (!(err instanceof PersonalException)) {
                 throw "know't";

@@ -7,7 +7,6 @@ function twoDigits(d) {
 }
 
 function DateToMysqlFormat() {
-    // let d = new Date();
     let result;
     with (new Date()) {
         result = getUTCFullYear() + "-" + twoDigits(1 + getUTCMonth()) + "-" +
@@ -15,7 +14,6 @@ function DateToMysqlFormat() {
             twoDigits(getUTCMinutes()) + ":" + twoDigits(getUTCSeconds());
     }
     return result;
-    //return d.getUTCFullYear() + "-" + twoDigits(1 + d.getUTCMonth()) + "-" + twoDigits(d.getUTCDate()) + " " + twoDigits(d.getUTCHours()) + ":" + twoDigits(d.getUTCMinutes()) + ":" + twoDigits(d.getUTCSeconds());
 };
 
 function GenerateToken(id) {
@@ -58,7 +56,7 @@ function checkFieldInJson(body, fields) {
 
 module.exports = {
     // funcs 
-    GenerateToken, DateToMysqlFormat, checkFieldInJson, 
+    GenerateToken, DateToMysqlFormat, checkFieldInJson,
     // classes
     PersonalException 
 };
