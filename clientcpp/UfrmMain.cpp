@@ -6,9 +6,9 @@
 #include "UfrmMain.h"
 
 // views
-#include "UfrmLogin.h"
-#include "UfrmApp.h"
-#include "UUtilities.h"
+#include "Views/UfrmLogin.h"
+#include "Views/UfrmApp.h"
+#include "Controllers/UUtilities.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.fmx"
@@ -49,8 +49,8 @@ void __fastcall TfrmMain::cl_Dispatch_Event(EventViews ev)
 	{
 	case START_SESSION:
 	{
+		GetView(__classid(TfrmApp), lyApplication, FActiveForm, "lyViewLayout");
 		tbMain->GotoVisibleTab(1);
-        GetView(__classid(TfrmApp), lyApplication, FActiveForm, "lyApplication");
 	} break;
 	}
 }

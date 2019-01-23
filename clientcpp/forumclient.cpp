@@ -8,9 +8,10 @@
 #include <System.StartUpCopy.hpp>
 //---------------------------------------------------------------------------
 USEFORM("UfrmMain.cpp", frmMain);
-USEFORM("UDataModule.cpp", dmData); /* TDataModule: File Type */
-USEFORM("UfrmLogin.cpp", frmLogin);
-USEFORM("UfrmApp.cpp", frmApp);
+USEFORM("Views\UfrmApp.cpp", frmApp);
+USEFORM("Views\UfrmArticleboard.cpp", frmArticleboard);
+USEFORM("Views\UfrmLogin.cpp", frmLogin);
+USEFORM("Services\UDataModule.cpp", dmData); /* TDataModule: File Type */
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -18,8 +19,10 @@ extern "C" int FMXmain()
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
-		Application->CreateForm(__classid(TdmData), &dmData);
 		Application->CreateForm(__classid(TfrmApp), &frmApp);
+		Application->CreateForm(__classid(TfrmArticleboard), &frmArticleboard);
+		Application->CreateForm(__classid(TfrmLogin), &frmLogin);
+		Application->CreateForm(__classid(TdmData), &dmData);
 		Application->Run();
 	}
 	catch (Exception &exception)

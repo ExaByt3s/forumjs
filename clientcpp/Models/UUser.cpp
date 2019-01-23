@@ -2,7 +2,7 @@
 
 #pragma hdrstop
 
-#include "UModels.h"
+#include "UUser.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
@@ -67,3 +67,4 @@ User& User::operator=(User&& user)
 	token = user.token;
     return *this;
 }
+

@@ -1,0 +1,134 @@
+object frmApp: TfrmApp
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object lyViewLayout: TLayout
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tcMain: TTabControl
+      Align = Client
+      Size.Width = 640.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      TabIndex = 0
+      TabOrder = 0
+      TabPosition = None
+      Sizes = (
+        640s
+        480s
+        640s
+        480s)
+      object tbiArticlesboard: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lyArticlesboard: TLayout
+          Align = Client
+          Size.Width = 440.000000000000000000
+          Size.Height = 480.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+        end
+        object lyRegionMV: TLayout
+          Align = Left
+          Size.Width = 200.000000000000000000
+          Size.Height = 480.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object rctDashboard: TRectangle
+            Align = Client
+            Size.Width = 200.000000000000000000
+            Size.Height = 480.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+            object imgProfileImg: TImage
+              MultiResBitmap = <
+                item
+                end>
+              Align = Top
+              Margins.Left = 30.000000000000000000
+              Margins.Top = 30.000000000000000000
+              Margins.Right = 30.000000000000000000
+              Position.X = 30.000000000000000000
+              Position.Y = 30.000000000000000000
+              Size.Width = 140.000000000000000000
+              Size.Height = 120.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object btnrtnprofile: TButton
+              Align = Top
+              Margins.Left = 82.000000000000000000
+              Margins.Top = 20.000000000000000000
+              Margins.Right = 82.000000000000000000
+              Position.X = 82.000000000000000000
+              Position.Y = 20.000000000000000000
+              Size.Width = 36.000000000000000000
+              Size.Height = 22.000000000000000000
+              Size.PlatformDefault = False
+              StyleLookup = 'priortoolbutton'
+              TabOrder = 1
+              Text = 'Button1'
+              Visible = False
+            end
+            object lblnameprofile: TLabel
+              Align = Top
+              StyledSettings = [Family, FontColor]
+              Margins.Left = 30.000000000000000000
+              Margins.Top = 10.000000000000000000
+              Margins.Right = 30.000000000000000000
+              Position.X = 30.000000000000000000
+              Position.Y = 160.000000000000000000
+              Size.Width = 140.000000000000000000
+              Size.Height = 30.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.Font.Size = 14.000000000000000000
+              TextSettings.Font.StyleExt = {00060000000000000004000000}
+              TextSettings.HorzAlign = Center
+              Text = 'name_profile'
+              TabOrder = 2
+            end
+          end
+        end
+      end
+      object tbiChatRoom: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem2'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lyChatRoom: TLayout
+          Align = Client
+          Size.Width = 640.000000000000000000
+          Size.Height = 480.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+        end
+      end
+    end
+  end
+end
