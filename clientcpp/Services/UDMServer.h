@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
 
-#ifndef UDataModuleH
-#define UDataModuleH
+#ifndef UDMServerH
+#define UDMServerH
 //---------------------------------------------------------------------------
 #include <System.Classes.hpp>
 #include <Data.Bind.Components.hpp>
@@ -33,6 +33,8 @@ public:		// User declarations
 	bool Login(const String& nickname, const String& password);
 	bool SignIn(refStr nickname, refStr lastname,
 				  refStr firstname, refStr email, refStr password);
+
+	// Articles
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TdmData *dmData;

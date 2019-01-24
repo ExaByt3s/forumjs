@@ -154,10 +154,6 @@
             <DependentOn>Controllers\ExceptionHandler.h</DependentOn>
             <BuildOrder>3</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Controllers\UQueueRutine.cpp">
-            <DependentOn>Controllers\UQueueRutine.h</DependentOn>
-            <BuildOrder>5</BuildOrder>
-        </CppCompile>
         <CppCompile Include="Controllers\USLSession.cpp">
             <DependentOn>Controllers\USLSession.h</DependentOn>
             <BuildOrder>6</BuildOrder>
@@ -177,15 +173,23 @@
             <BuildOrder>2</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <CppCompile Include="Models\UArticle.cpp">
+            <DependentOn>Models\UArticle.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Models\UEntityBase.cpp">
+            <DependentOn>Models\UEntityBase.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Models\UUser.cpp">
             <DependentOn>Models\UUser.h</DependentOn>
             <BuildOrder>13</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Services\UDataModule.cpp">
+        <CppCompile Include="Services\UDMServer.cpp">
             <Form>dmData</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
-            <DependentOn>Services\UDataModule.h</DependentOn>
+            <DependentOn>Services\UDMServer.h</DependentOn>
             <BuildOrder>12</BuildOrder>
         </CppCompile>
         <CppCompile Include="UfrmMain.cpp">
@@ -212,11 +216,11 @@
             <DependentOn>Views\UfrmLogin.h</DependentOn>
             <BuildOrder>12</BuildOrder>
         </CppCompile>
+        <FormResources Include="Services\UDMServer.dfm"/>
         <FormResources Include="UfrmMain.fmx"/>
-        <FormResources Include="Views\UfrmApp.fmx"/>
-        <FormResources Include="Views\UfrmArticleboard.fmx"/>
         <FormResources Include="Views\UfrmLogin.fmx"/>
-        <FormResources Include="Services\UDataModule.dfm"/>
+        <FormResources Include="Views\UfrmArticleboard.fmx"/>
+        <FormResources Include="Views\UfrmApp.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

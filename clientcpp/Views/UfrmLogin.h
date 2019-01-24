@@ -12,6 +12,8 @@
 #include <FMX.Controls.Presentation.hpp>
 #include <FMX.Edit.hpp>
 #include <FMX.StdCtrls.hpp>
+#include <FMX.Dialogs.hpp>
+#include <FMX.Objects.hpp>
 
 //---------------------------------------------------------------------------
 class TfrmLogin : public TForm
@@ -38,10 +40,13 @@ __published:	// IDE-managed Components
 	TEdit *txtln_s;
 	TLayout *lyLeft;
 	TLayout *lyRight;
+	TOpenDialog *odLoadPhoto;
+	TRectangle *rctProfilePhoto;
 	void __fastcall btnsigninClick(TObject *Sender);
 	void __fastcall btnstartsession_sClick(TObject *Sender);
 	void __fastcall btnstartsessionClick(TObject *Sender);
 	void __fastcall btnsignin_sClick(TObject *Sender);
+	void __fastcall rctProfilePhotoClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmLogin(TComponent* Owner);

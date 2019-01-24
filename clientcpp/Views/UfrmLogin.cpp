@@ -6,6 +6,8 @@
 #include "UfrmLogin.h"
 #include "USLSession.h"
 #include "UViewsBase.h"
+
+#include <memory>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.fmx"
@@ -18,12 +20,14 @@ __fastcall TfrmLogin::TfrmLogin(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TfrmLogin::btnsigninClick(TObject *Sender)
 {
+    lyLeft->Visible = true;
     tbLogSign->Next();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmLogin::btnstartsession_sClick(TObject *Sender)
 {
+    lyLeft->Visible = false;
 	tbLogSign->Previous();
 }
 //---------------------------------------------------------------------------
@@ -55,6 +59,16 @@ void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 	if (result)
 	{
         tbLogSign->Previous();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLogin::rctProfilePhotoClick(TObject *Sender)
+{
+    odLoadPhoto->Filter = TBitmapCodecManager::GetFilterString();
+	if (odLoadPhoto->Execute())
+	{
+		rctProfilePhoto->Fill->Bitmap->Bitmap->LoadFromFile(odLoadPhoto->FileName);
 	}
 }
 //---------------------------------------------------------------------------

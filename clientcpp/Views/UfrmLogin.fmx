@@ -16,30 +16,47 @@ object frmLogin: TfrmLogin
     TabOrder = 0
     object lyLeft: TLayout
       Align = Left
-      Size.Width = 319.000000000000000000
+      Size.Width = 320.000000000000000000
       Size.Height = 480.000000000000000000
       Size.PlatformDefault = False
+      Visible = False
       TabOrder = 0
+      object rctProfilePhoto: TRectangle
+        Align = Top
+        Cursor = crHandPoint
+        Fill.Bitmap.WrapMode = TileStretch
+        Fill.Kind = Bitmap
+        Margins.Left = 50.000000000000000000
+        Margins.Top = 50.000000000000000000
+        Margins.Right = 50.000000000000000000
+        Position.X = 50.000000000000000000
+        Position.Y = 50.000000000000000000
+        Size.Width = 220.000000000000000000
+        Size.Height = 219.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFFAEAEAE
+        OnClick = rctProfilePhotoClick
+      end
     end
     object lyRight: TLayout
       Align = Right
-      Position.X = 321.000000000000000000
-      Size.Width = 319.000000000000000000
+      Position.X = 320.000000000000000000
+      Size.Width = 320.000000000000000000
       Size.Height = 480.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       object tbLogSign: TTabControl
         Align = Client
-        Size.Width = 319.000000000000000000
+        Size.Width = 320.000000000000000000
         Size.Height = 480.000000000000000000
         Size.PlatformDefault = False
         TabIndex = 0
         TabOrder = 0
         TabPosition = None
         Sizes = (
-          319s
+          320s
           480s
-          319s
+          320s
           480s)
         object tbiLogin: TTabItem
           CustomIcon = <
@@ -149,6 +166,7 @@ object frmLogin: TfrmLogin
               Touch.InteractiveGestures = [LongTap, DoubleTap]
               Align = Bottom
               TabOrder = 0
+              MaxLength = 16
               Position.X = 40.000000000000000000
               Position.Y = 13.000000000000000000
               Margins.Left = 40.000000000000000000
@@ -163,6 +181,7 @@ object frmLogin: TfrmLogin
               Touch.InteractiveGestures = [LongTap, DoubleTap]
               Align = Bottom
               TabOrder = 2
+              MaxLength = 32
               Position.X = 40.000000000000000000
               Position.Y = 113.000000000000000000
               Margins.Left = 40.000000000000000000
@@ -177,6 +196,7 @@ object frmLogin: TfrmLogin
               Touch.InteractiveGestures = [LongTap, DoubleTap]
               Align = Bottom
               TabOrder = 3
+              MaxLength = 16
               Position.X = 40.000000000000000000
               Position.Y = 163.000000000000000000
               Margins.Left = 40.000000000000000000
@@ -191,6 +211,7 @@ object frmLogin: TfrmLogin
               Touch.InteractiveGestures = [LongTap, DoubleTap]
               Align = Bottom
               TabOrder = 4
+              MaxLength = 16
               Position.X = 40.000000000000000000
               Position.Y = 213.000000000000000000
               Margins.Left = 40.000000000000000000
@@ -249,6 +270,7 @@ object frmLogin: TfrmLogin
                 Touch.InteractiveGestures = [LongTap, DoubleTap]
                 Align = Left
                 TabOrder = 0
+                MaxLength = 16
                 Size.Width = 100.000000000000000000
                 Size.Height = 30.000000000000000000
                 Size.PlatformDefault = False
@@ -258,6 +280,7 @@ object frmLogin: TfrmLogin
                 Touch.InteractiveGestures = [LongTap, DoubleTap]
                 Align = Right
                 TabOrder = 1
+                MaxLength = 16
                 Position.X = 100.000000000000000000
                 Size.Width = 100.000000000000000000
                 Size.Height = 30.000000000000000000
@@ -269,5 +292,11 @@ object frmLogin: TfrmLogin
         end
       end
     end
+  end
+  object odLoadPhoto: TOpenDialog
+    DefaultExt = '*.jpeg'
+    Filter = 'JPEG|*.jpeg|JPG|*.jpg|PNG|*.png'
+    Left = 272
+    Top = 8
   end
 end

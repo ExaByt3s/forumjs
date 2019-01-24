@@ -37,7 +37,7 @@ void __fastcall TfrmMain::btnok_promptClick(TObject *Sender)
 
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
-	GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyRight");
+	GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyViewLayout");
 	SLSession::Session->fn_prompt = &cl_Prompt_View;
 	ViewsBase::viewsBase->fn_dispatch = &cl_Dispatch_Event;
 }

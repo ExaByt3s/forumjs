@@ -3,7 +3,7 @@
 
 #pragma hdrstop
 
-#include "UDataModule.h"
+#include "UDMServer.h"
 #include "UUtilities.h"
 #include "ExceptionHandler.h"
 #include <FMX.Dialogs.hpp>
@@ -69,9 +69,9 @@ bool TdmData::Login(const String& nickname, const String& password)
 		if (codError)
 			throw ExceptionHandler();
 
-		_user.nickname = nickname;
-		_user.password = pass;
-		_user.token = res->GetValue("token")->Value();
+		_user.Nickname = nickname;
+		_user.Password = pass;
+		_user.Token = res->GetValue("token")->Value();
         return true;
 	}
 	catch (ExceptionHandler& e)
