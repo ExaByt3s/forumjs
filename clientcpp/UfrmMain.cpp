@@ -38,8 +38,8 @@ void __fastcall TfrmMain::btnok_promptClick(TObject *Sender)
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
 	GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyViewLayout");
-	SLSession::Session->fn_prompt = &cl_Prompt_View;
 	ViewsBase::viewsBase->fn_dispatch = &cl_Dispatch_Event;
+    ViewsBase::viewsBase->fn_prompt = &cl_Prompt_View;
 }
 //---------------------------------------------------------------------------
 
@@ -51,6 +51,11 @@ void __fastcall TfrmMain::cl_Dispatch_Event(EventViews ev)
 	{
 		GetView(__classid(TfrmApp), lyApplication, FActiveForm, "lyViewLayout");
 		tbMain->GotoVisibleTab(1);
+	} break;
+	case LOGOUT_SESSION:
+	{
+		GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyViewLayout");
+		tbMain->GotoVisibleTab(0);
 	} break;
 	}
 }

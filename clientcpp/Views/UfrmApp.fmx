@@ -7,6 +7,7 @@ object frmApp: TfrmApp
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
   object lyViewLayout: TLayout
     Align = Client
@@ -68,7 +69,7 @@ object frmApp: TfrmApp
               Margins.Top = 30.000000000000000000
               Margins.Right = 30.000000000000000000
               Position.X = 30.000000000000000000
-              Position.Y = 30.000000000000000000
+              Position.Y = 72.000000000000000000
               Size.Width = 140.000000000000000000
               Size.Height = 120.000000000000000000
               Size.PlatformDefault = False
@@ -86,7 +87,7 @@ object frmApp: TfrmApp
               StyleLookup = 'priortoolbutton'
               TabOrder = 1
               Text = 'Button1'
-              Visible = False
+              OnClick = btnrtnprofileClick
             end
             object lblnameprofile: TLabel
               Align = Top
@@ -95,7 +96,7 @@ object frmApp: TfrmApp
               Margins.Top = 10.000000000000000000
               Margins.Right = 30.000000000000000000
               Position.X = 30.000000000000000000
-              Position.Y = 160.000000000000000000
+              Position.Y = 202.000000000000000000
               Size.Width = 140.000000000000000000
               Size.Height = 30.000000000000000000
               Size.PlatformDefault = False

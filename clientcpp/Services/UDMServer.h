@@ -9,8 +9,11 @@
 #include <REST.Client.hpp>
 #include <REST.Types.hpp>
 #include <IPPeerClient.hpp>
-#include <memory>
 
+#include <memory>
+#include <mutex>
+
+#include "../Controllers/ExceptionHandler.h"
 #include "../Models/UUser.h"
 //---------------------------------------------------------------------------
 
@@ -22,6 +25,7 @@ class TdmData : public TDataModule
 {
 __published:	// IDE-managed Components
 private:	// User declarations
+	std::mutex _m_execrest;
     User _user;
 
 	// methods REQUEST REST API
@@ -30,11 +34,14 @@ public:		// User declarations
 	__fastcall TdmData(TComponent* Owner);
 
     // Login & Signin
-	bool Login(const String& nickname, const String& password);
-	bool SignIn(refStr nickname, refStr lastname,
+	ExceptionHandler Login(const String& nickname, const String& password);
+	ExceptionHandler SignIn(refStr nickname, refStr lastname,
 				  refStr firstname, refStr email, refStr password);
 
 	// Articles
+
+	// propertys
+	__property User UserData = { read=_user };
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TdmData *dmData;

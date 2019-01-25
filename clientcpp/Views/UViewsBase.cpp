@@ -21,3 +21,8 @@ void ViewsBase::LaunchDispatch(EventViews ev)
     fn_dispatch(ev);
 }
 
+void ViewsBase::PromptMsg(const String& msg)
+{
+    fn_prompt(msg);
+}
+

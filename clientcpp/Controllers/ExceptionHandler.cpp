@@ -9,21 +9,43 @@
 #pragma package(smart_init)
 
 ExceptionHandler::ExceptionHandler()
+	: _response(false)
+	, _codError(0)
+	, _method("")
 {
-	codError = 0;
-    method = "";
 }
 
-ExceptionHandler::ExceptionHandler(int CodError, refUStr Method)
+ExceptionHandler::ExceptionHandler(ExceptionHandler&& eh)
 {
-	codError = CodError;
-    method = Method;
+    *this = std::move(eh);
+}
+
+ExceptionHandler::ExceptionHandler(bool res)
+	: _response(res)
+	, _codError(0)
+    , _method("")
+{
+}
+
+ExceptionHandler::ExceptionHandler(bool res, int CodError, refUStr Method)
+	: _response(res)
+	, _codError(CodError)
+	, _method(Method)
+{
+}
+
+ExceptionHandler& ExceptionHandler::operator=(ExceptionHandler&& eh)
+{
+	Response = eh.Response;
+	CodError = eh.CodError;
+	_method = eh._method;
+    return *this;
 }
 
 String ExceptionHandler::ProcessCodError()
 {
     String msg;
-    switch (codError)
+    switch (_codError)
 	{
 		case ERROR_TOKEN:
 			msg = "Error token!";
@@ -64,8 +86,8 @@ String ExceptionHandler::ProcessCodError()
 
 void ExceptionHandler::ShowMsgException()
 {
-	ShowMessage("Method: " + method +
-				"\nCodError: " + codError +
+	ShowMessage("Method: " + _method +
+				"\nCodError: " + _codError +
 				"\nMessage: " + ProcessCodError());
 }
 

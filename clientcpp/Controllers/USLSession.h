@@ -5,25 +5,24 @@
 
 #include <System.Classes.hpp>
 #include "../Models/UUser.h"
-//---------------------------------------------------------------------------
 
-// closure for views
-using _Prompt_View = void __fastcall(__closure *)(const String&);
+#include "ExceptionHandler.h"
+//---------------------------------------------------------------------------
 
 class SLSession
 {
-    using refStr = const String&;
+    using refStr = const UnicodeString&;
 public:
     static SLSession *Session;
 	SLSession();
 	~SLSession();
 
-	bool StartSession(refStr nickname, refStr password);
-	bool RegisterUser(refStr nickname, refStr lastname,
+	ExceptionHandler StartSession(refStr nickname, refStr password);
+	ExceptionHandler RegisterUser(refStr nickname, refStr lastname,
 				  refStr firstname, refStr email, refStr password);
 
-    // closures
-	_Prompt_View fn_prompt;
+	// ExceptionHandler for hilo
+	ExceptionHandler _th_eh;
 };
 
 #endif

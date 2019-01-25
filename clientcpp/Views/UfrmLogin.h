@@ -42,14 +42,22 @@ __published:	// IDE-managed Components
 	TLayout *lyRight;
 	TOpenDialog *odLoadPhoto;
 	TRectangle *rctProfilePhoto;
+	TLayout *lyLoading;
 	void __fastcall btnsigninClick(TObject *Sender);
 	void __fastcall btnstartsession_sClick(TObject *Sender);
 	void __fastcall btnstartsessionClick(TObject *Sender);
 	void __fastcall btnsignin_sClick(TObject *Sender);
 	void __fastcall rctProfilePhotoClick(TObject *Sender);
+	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall FormDestroy(TObject *Sender);
 private:	// User declarations
+    TForm *NotRequire;
+
 public:		// User declarations
 	__fastcall TfrmLogin(TComponent* Owner);
+
+	// closure
+    void __fastcall Loading(bool interruptor);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmLogin *frmLogin;

@@ -7,11 +7,12 @@
 #pragma hdrstop
 #include <System.StartUpCopy.hpp>
 //---------------------------------------------------------------------------
-USEFORM("Services\UDMServer.cpp", dmData); /* TDataModule: File Type */
-USEFORM("UfrmMain.cpp", frmMain);
-USEFORM("Views\UfrmLogin.cpp", frmLogin);
-USEFORM("Views\UfrmArticleboard.cpp", frmArticleboard);
 USEFORM("Views\UfrmApp.cpp", frmApp);
+USEFORM("UfrmMain.cpp", frmMain);
+USEFORM("Services\UDMServer.cpp", dmData); /* TDataModule: File Type */
+USEFORM("Views\UfrmArticleboard.cpp", frmArticleboard);
+USEFORM("Views\UfrmUtilities.cpp", frmUtilities);
+USEFORM("Views\UfrmLogin.cpp", frmLogin);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -19,9 +20,6 @@ extern "C" int FMXmain()
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
-		Application->CreateForm(__classid(TfrmApp), &frmApp);
-		Application->CreateForm(__classid(TfrmArticleboard), &frmArticleboard);
-		Application->CreateForm(__classid(TfrmLogin), &frmLogin);
 		Application->CreateForm(__classid(TdmData), &dmData);
 		Application->Run();
 	}

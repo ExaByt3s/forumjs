@@ -4,8 +4,11 @@
 #pragma hdrstop
 
 #include "UfrmLogin.h"
-#include "USLSession.h"
+#include "UfrmUtilities.h"
+#include "Controllers/USLSession.h"
 #include "UViewsBase.h"
+#include "Controllers/ExceptionHandler.h"
+#include "Controllers/UUtilities.h"
 
 #include <memory>
 //---------------------------------------------------------------------------
@@ -15,6 +18,7 @@ TfrmLogin *frmLogin;
 //---------------------------------------------------------------------------
 __fastcall TfrmLogin::TfrmLogin(TComponent* Owner)
 	: TForm(Owner)
+    , NotRequire(nullptr)
 {
 }
 //---------------------------------------------------------------------------
@@ -34,32 +38,66 @@ void __fastcall TfrmLogin::btnstartsession_sClick(TObject *Sender)
 
 void __fastcall TfrmLogin::btnstartsessionClick(TObject *Sender)
 {
-	bool result = SLSession::Session->StartSession(
-		txtusername->Text,
-		txtpassword->Text
-	);
+	TThread *t = TThread::CreateAnonymousThread([this]() {
+		TThread::Synchronize(TThread::Current, [this]() {
+            Loading(true);
+		});
 
-	if (result)
-	{
-		ViewsBase::viewsBase->LaunchDispatch(START_SESSION);
-	}
+		auto eh = SLSession::Session->StartSession(
+			txtusername->Text,
+			txtpassword->Text
+		);
+		bool result = eh.Response;
+        String msg = eh.ProcessCodError();
+        TThread::Sleep(2000);
+
+		TThread::Synchronize(TThread::Current, [this, result, msg]() {
+			Loading(false);
+			if (!result)
+			{
+				ViewsBase::viewsBase->PromptMsg(msg);
+				return;
+			}
+			ViewsBase::viewsBase->LaunchDispatch(START_SESSION);
+		});
+	});
+	t->FreeOnTerminate = true;
+	t->Start();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 {
-	bool result = SLSession::Session->RegisterUser(
-		txtusername_s->Text,
-		txtln_s->Text,
-		txtfn_s->Text,
-		txtemail_s->Text,
-        txtpassword_s->Text
-	);
+	TThread *t = TThread::CreateAnonymousThread([this]() {
+        TThread::Synchronize(TThread::Current, [this]() {
+            Loading(true);
+		});
 
-	if (result)
-	{
-        tbLogSign->Previous();
-	}
+		auto eh = SLSession::Session->RegisterUser(
+			txtusername_s->Text,
+			txtln_s->Text,
+			txtfn_s->Text,
+			txtemail_s->Text,
+			txtpassword_s->Text
+		);
+
+		bool result = eh.Response;
+		String msg = eh.ProcessCodError();
+
+		TThread::Sleep(2000);
+
+		TThread::Synchronize(TThread::Current, [this, result, msg]() {
+			Loading(false);
+			if (!result)
+			{
+				ViewsBase::viewsBase->PromptMsg(msg);
+				return;
+			}
+			tbLogSign->Previous();
+		});
+	});
+	t->FreeOnTerminate = true;
+	t->Start();
 }
 //---------------------------------------------------------------------------
 
@@ -70,6 +108,24 @@ void __fastcall TfrmLogin::rctProfilePhotoClick(TObject *Sender)
 	{
 		rctProfilePhoto->Fill->Bitmap->Bitmap->LoadFromFile(odLoadPhoto->FileName);
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLogin::Loading(bool interruptor)
+{
+    lyLoading->Visible = interruptor;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLogin::FormCreate(TObject *Sender)
+{
+	GetView(__classid(TfrmUtilities), lyLoading, NotRequire, "lyViewLoading");
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLogin::FormDestroy(TObject *Sender)
+{
+    NotRequire->DisposeOf();
 }
 //---------------------------------------------------------------------------
 

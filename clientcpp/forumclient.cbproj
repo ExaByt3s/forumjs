@@ -162,10 +162,6 @@
             <DependentOn>Controllers\UUtilities.h</DependentOn>
             <BuildOrder>7</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Controllers\UViewsBase.cpp">
-            <DependentOn>Controllers\UViewsBase.h</DependentOn>
-            <BuildOrder>8</BuildOrder>
-        </CppCompile>
         <CppCompile Include="forumclient.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
@@ -216,11 +212,22 @@
             <DependentOn>Views\UfrmLogin.h</DependentOn>
             <BuildOrder>12</BuildOrder>
         </CppCompile>
-        <FormResources Include="Services\UDMServer.dfm"/>
-        <FormResources Include="UfrmMain.fmx"/>
-        <FormResources Include="Views\UfrmLogin.fmx"/>
-        <FormResources Include="Views\UfrmArticleboard.fmx"/>
+        <CppCompile Include="Views\UfrmUtilities.cpp">
+            <Form>frmUtilities</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>Views\UfrmUtilities.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="Views\UViewsBase.cpp">
+            <DependentOn>Views\UViewsBase.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
         <FormResources Include="Views\UfrmApp.fmx"/>
+        <FormResources Include="UfrmMain.fmx"/>
+        <FormResources Include="Services\UDMServer.dfm"/>
+        <FormResources Include="Views\UfrmArticleboard.fmx"/>
+        <FormResources Include="Views\UfrmUtilities.fmx"/>
+        <FormResources Include="Views\UfrmLogin.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -248,6 +255,7 @@
                     <Source Name="MainSource">forumclient.cpp</Source>
                 </Source>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\DataExplorerDBXPluginEnt250.bpl">DBExpress Enterprise Data Explorer Integration</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k250.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcbofficexp250.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>

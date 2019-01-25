@@ -1,43 +1,30 @@
 //---------------------------------------------------------------------------
 
-#ifndef UfrmAppH
-#define UfrmAppH
+#ifndef UfrmUtilitiesH
+#define UfrmUtilitiesH
 //---------------------------------------------------------------------------
 #include <System.Classes.hpp>
 #include <FMX.Controls.hpp>
 #include <FMX.Forms.hpp>
 #include <FMX.Layouts.hpp>
-#include <FMX.Types.hpp>
 #include <FMX.TabControl.hpp>
-#include <FMX.Controls.Presentation.hpp>
-#include <FMX.MultiView.hpp>
+#include <FMX.Types.hpp>
 #include <FMX.Objects.hpp>
 #include <FMX.StdCtrls.hpp>
 //---------------------------------------------------------------------------
-class TfrmApp : public TForm
+class TfrmUtilities : public TForm
 {
 __published:	// IDE-managed Components
-	TLayout *lyViewLayout;
-	TTabControl *tcMain;
-	TTabItem *tbiArticlesboard;
-	TTabItem *tbiChatRoom;
-	TLayout *lyChatRoom;
-	TLayout *lyArticlesboard;
-	TLayout *lyRegionMV;
-	TRectangle *rctDashboard;
-	TImage *imgProfileImg;
-	TButton *btnrtnprofile;
-	TLabel *lblnameprofile;
-	void __fastcall btnrtnprofileClick(TObject *Sender);
-	void __fastcall FormCreate(TObject *Sender);
+	TTabControl *tbUtils;
+	TTabItem *tbiLoading;
+	TLayout *lyViewLoading;
+	TRectangle *rctBackground;
+	TAniIndicator *AniIndicator1;
 private:	// User declarations
 public:		// User declarations
-	__fastcall TfrmApp(TComponent* Owner);
-
-	// Init gui - profile
-    void __fastcall LoadProfile();
+	__fastcall TfrmUtilities(TComponent* Owner);
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TfrmApp *frmApp;
+extern PACKAGE TfrmUtilities *frmUtilities;
 //---------------------------------------------------------------------------
 #endif

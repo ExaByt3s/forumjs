@@ -21,6 +21,7 @@ __fastcall TdmData::TdmData(TComponent* Owner)
 
 UPtrJSONObject TdmData::ExecREST(String method, const UPtrJSONObject& body)
 {
+    std::lock_guard<std::mutex> lock(_m_execrest);
 	std::unique_ptr<TRESTClient> rClient(new TRESTClient(this));
 	std::unique_ptr<TRESTRequest> rRequest(new TRESTRequest(this));
 	std::unique_ptr<TRESTResponse> rResponse(new TRESTResponse(this));
@@ -54,7 +55,7 @@ UPtrJSONObject TdmData::ExecREST(String method, const UPtrJSONObject& body)
 }
 //---------------------------------------------------------------------------
 
-bool TdmData::Login(const String& nickname, const String& password)
+ExceptionHandler TdmData::Login(const String& nickname, const String& password)
 {
 	UPtrJSONObject body(new TJSONObject());
 	UPtrJSONObject res;
@@ -72,16 +73,16 @@ bool TdmData::Login(const String& nickname, const String& password)
 		_user.Nickname = nickname;
 		_user.Password = pass;
 		_user.Token = res->GetValue("token")->Value();
-        return true;
+		return ExceptionHandler(true);
 	}
 	catch (ExceptionHandler& e)
 	{
-		throw ExceptionHandler(codError, "TdmData::Login");
+		return ExceptionHandler(false, codError, "TdmData::Login");
     }
 }
 //---------------------------------------------------------------------------
 
-bool TdmData::SignIn(refStr nickname, refStr lastname,
+ExceptionHandler TdmData::SignIn(refStr nickname, refStr lastname,
 						refStr firstname, refStr email, refStr password)
 {
     UPtrJSONObject body(new TJSONObject());
@@ -100,11 +101,11 @@ bool TdmData::SignIn(refStr nickname, refStr lastname,
         if (codError)
 			throw ExceptionHandler();
 
-		return true;
+		return ExceptionHandler(true);
 	}
 	catch (ExceptionHandler& e)
 	{
-		throw ExceptionHandler(codError, "TdmData::SignIn");
+		return ExceptionHandler(false, codError, "TdmData::SignIn");
 	}
 }
 //---------------------------------------------------------------------------
