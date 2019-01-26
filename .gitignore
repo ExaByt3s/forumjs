@@ -2,6 +2,7 @@
 *.obj
 *.dfm.*
 *.cpp.*
+*.h.*
 
 clientcpp/__history
 clientcpp/__recovery
