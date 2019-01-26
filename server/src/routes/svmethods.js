@@ -2,7 +2,7 @@ const db = require('../database/DBCommon');
 const { PersonalException, checkFieldInJson } = require('../lib/utilities');
 const sec = ('../lib/secure_utils');
 const path = require('path');
-const uuid = require('uuid/v5');
+const uuid = require('uuid/v1');
 
 /*
     Construir el cliente
@@ -22,6 +22,7 @@ const methods = {};
     -8  : Article not found
     -9  : Article not have likes
     -10 : Articles empty
+    -11 : User not have image
     -98 : Only for Developers
     -99 : Error query
     -999 : Connection error
@@ -92,6 +93,7 @@ Request:
         firstname:
         email:
         password:
+        image:
     }
 Response:
     {
@@ -99,16 +101,26 @@ Response:
     }
  */
 methods.register_user = async (req) => {
-    let check = await checkRequestJson(req.body, ['nickname','lastname','firstname','email','password']);
+    let check = await checkRequestJson(req.body, 
+        ['nickname','lastname','firstname','email','password', 'image']);
     if (!check[0]) return check[1];
     try {
+        // process img
+        let path_img = 'none';
+        if (req.body.image != '') {
+            path_img = path.join('/storage/images/profile/' + uuid());
+            sec.base64_decode(req.body.image, path_img);
+        }
+
         let result = await db.RegisterUser([
             req.body.nickname,
             req.body.lastname,
             req.body.firstname,
             req.body.email,
-            req.body.password
+            req.body.password,
+            path_img
         ]);
+
         return result ? {
             codError: 0
         } : {
@@ -223,7 +235,6 @@ Request:
         title:
         description:
         image_p: base64
-        image_name: 
     }
 Response:
     {
@@ -232,23 +243,20 @@ Response:
 */
 methods.push_article = async (req) => {
     let check = await checkRequestJson(req.body, 
-        ['ac_id','range','title','description','image_p','image_name']);
+        ['ac_id','range','title','description','image_p']);
     if (!check[0]) return check[1];
     try {
-        let uuid_img = ''; 
-        let ext; 
+        let path_img = 'none'; 
         if (image_p != '') {
-            uuid_img = uuid(req.body.image_name, uuid.URL);
-            ext = path.extname(req.body.image_name);
-            sec.base64_decode(req.body.image_p, path.join(
-                __dirname + 'storage/images/articles/' + uuid_img + ext));
+            path_img = path.join('storage/images/articles/' + uuid());
+            sec.base64_decode(req.body.image_p, path_img);
         }
         let result = await db.PushArticle([
             req.body.ac_id,
             req.body.range,
             req.body.title,
             req.body.description,
-            uuid_img
+            path_img
         ]);
         return result ? {
             codError: 0
@@ -340,8 +348,8 @@ Response:
 methods.get_articles = async (req) => {
     let check = await checkRequestJson(req.body, ['id','ar_id']);
     if (!check[0]) return check[1];
-    //check = await checkToken(req.body);
-    //if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
     try {
         let rows = await db.GetArticleById(req.body.ar_id);
         let arr_data = [];
@@ -356,6 +364,36 @@ methods.get_articles = async (req) => {
                 create_at: row.create_at
             });
         }
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        id
+        token
+        id_usr
+    }
+Response:
+    {
+        codError
+        image
+    }
+ */
+methods.get_userphoto = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','token','id_usr']);
+    if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
+    try {
+        let row = await db.GetUserImage(req.body.id_user);
+        let b64 = sec.base64_encode(row);
+        return { codError: 0, image: b64 };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();

@@ -41,15 +41,15 @@ __published:	// IDE-managed Components
 	TLayout *lyLeft;
 	TLayout *lyRight;
 	TOpenDialog *odLoadPhoto;
-	TRectangle *rctProfilePhoto;
 	TLayout *lyLoading;
+	TCircle *crtProfilePhoto;
 	void __fastcall btnsigninClick(TObject *Sender);
 	void __fastcall btnstartsession_sClick(TObject *Sender);
 	void __fastcall btnstartsessionClick(TObject *Sender);
 	void __fastcall btnsignin_sClick(TObject *Sender);
-	void __fastcall rctProfilePhotoClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
+	void __fastcall crtProfilePhotoClick(TObject *Sender);
 private:	// User declarations
     TForm *NotRequire;
 

@@ -24,8 +24,8 @@ ExceptionHandler SLSession::StartSession(refStr nickname, refStr password)
 }
 
 ExceptionHandler SLSession::RegisterUser(refStr nickname, refStr lastname,
-				  refStr firstname, refStr email, refStr password)
+				  refStr firstname, refStr email, refStr password, TBitmap *bm)
 {
-	return dmData->SignIn(nickname, lastname, firstname, email, password);
+	return dmData->SignIn(nickname, lastname, firstname, email, password, bm);
 }
 

@@ -194,6 +194,9 @@
             <DependentOn>UfrmMain.h</DependentOn>
             <BuildOrder>2</BuildOrder>
         </CppCompile>
+        <DelphiCompile Include="UHelper.pas">
+            <BuildOrder>15</BuildOrder>
+        </DelphiCompile>
         <CppCompile Include="Views\UfrmApp.cpp">
             <Form>frmApp</Form>
             <FormType>fmx</FormType>

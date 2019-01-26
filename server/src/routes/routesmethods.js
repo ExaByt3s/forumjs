@@ -26,6 +26,10 @@ svm_router.post('/getuser', async (req, res) => {
     res.json(await svm.get_user(req));
 });
 
+svm_router.post('/getuserphoto', async (req, res) => {
+    res.json(await svm.get_userphoto(req));
+});
+
 // articles
 svm_router.post('/pusharticle', async (req, res) => {
     res.json(await svm.push_article(req));

@@ -5,13 +5,20 @@ USE forumdev_db;
 
 CREATE TABLE `accounts` (
     `acc_id` INT(11) NOT NULL AUTO_INCREMENT,
-    `range` INT(3) NOT NULL,
+    `range` INT(11) NOT NULL,
     `nickname` VARCHAR(16) NOT NULL,
     `lastname` VARCHAR(16) NOT NULL,
     `firstname` VARCHAR(16) NOT NULL,
     `email` VARCHAR(32) NOT NULL,
     `create_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`acc_id`)
+);
+
+CREATE TABLE `profiles` (
+    `p_id` INT(11) NOT NULL AUTO_INCREMENT,
+    `ac_id` INT(11) NOT NULL,
+    `image_p` VARCHAR(64) NOT NULL,
+    PRIMARY KEY (`p_id`)
 );
 
 CREATE TABLE `login` (
@@ -41,6 +48,12 @@ CREATE TABLE `likes` (
     `create_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`li_id`)
 );
+
+ALTER TABLE `profiles`
+    ADD CONSTRAINT FK_profiles_accounts FOREIGN KEY (`ac_id`)
+        REFERENCES `accounts`(`acc_id`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE;
 
 ALTER TABLE `login`
     ADD CONSTRAINT FK_login_accounts FOREIGN KEY (`ac_id`)

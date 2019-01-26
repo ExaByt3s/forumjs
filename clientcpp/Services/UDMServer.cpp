@@ -6,6 +6,8 @@
 #include "UDMServer.h"
 #include "UUtilities.h"
 #include "ExceptionHandler.h"
+#include "../UHelper.hpp"
+
 #include <FMX.Dialogs.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -55,7 +57,7 @@ UPtrJSONObject TdmData::ExecREST(String method, const UPtrJSONObject& body)
 }
 //---------------------------------------------------------------------------
 
-ExceptionHandler TdmData::Login(const String& nickname, const String& password)
+ExceptionHandler TdmData::Login(refStr nickname, refStr password)
 {
 	UPtrJSONObject body(new TJSONObject());
 	UPtrJSONObject res;
@@ -83,7 +85,7 @@ ExceptionHandler TdmData::Login(const String& nickname, const String& password)
 //---------------------------------------------------------------------------
 
 ExceptionHandler TdmData::SignIn(refStr nickname, refStr lastname,
-						refStr firstname, refStr email, refStr password)
+						refStr firstname, refStr email, refStr password, TBitmap *bm)
 {
     UPtrJSONObject body(new TJSONObject());
 	UPtrJSONObject res;
@@ -93,6 +95,9 @@ ExceptionHandler TdmData::SignIn(refStr nickname, refStr lastname,
 	body->AddPair("firstname", firstname.LowerCase());
 	body->AddPair("email", email);
 	body->AddPair("password", pass);
+	std::unique_ptr<TBytesStream> b(new TBytesStream(TBytes()));
+    bm->SaveToStream(b.get());
+	body->AddPair("image", TEncryp::B64Encode(b.get()));
 	res.reset(ExecREST("signin", body).release());
 	int codError = StrToInt(res->GetValue("codError")->Value());
 

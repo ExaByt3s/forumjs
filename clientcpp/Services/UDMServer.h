@@ -34,9 +34,9 @@ public:		// User declarations
 	__fastcall TdmData(TComponent* Owner);
 
     // Login & Signin
-	ExceptionHandler Login(const String& nickname, const String& password);
+	ExceptionHandler Login(refStr nickname, refStr password);
 	ExceptionHandler SignIn(refStr nickname, refStr lastname,
-				  refStr firstname, refStr email, refStr password);
+				  refStr firstname, refStr email, refStr password, TBitmap *bm);
 
 	// Articles
 

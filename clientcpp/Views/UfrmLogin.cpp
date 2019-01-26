@@ -78,7 +78,8 @@ void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 			txtln_s->Text,
 			txtfn_s->Text,
 			txtemail_s->Text,
-			txtpassword_s->Text
+			txtpassword_s->Text,
+            crtProfilePhoto->Fill->Bitmap->Bitmap
 		);
 
 		bool result = eh.Response;
@@ -101,15 +102,6 @@ void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmLogin::rctProfilePhotoClick(TObject *Sender)
-{
-    odLoadPhoto->Filter = TBitmapCodecManager::GetFilterString();
-	if (odLoadPhoto->Execute())
-	{
-		rctProfilePhoto->Fill->Bitmap->Bitmap->LoadFromFile(odLoadPhoto->FileName);
-	}
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfrmLogin::Loading(bool interruptor)
 {
@@ -126,6 +118,16 @@ void __fastcall TfrmLogin::FormCreate(TObject *Sender)
 void __fastcall TfrmLogin::FormDestroy(TObject *Sender)
 {
     NotRequire->DisposeOf();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLogin::crtProfilePhotoClick(TObject *Sender)
+{
+    odLoadPhoto->Filter = TBitmapCodecManager::GetFilterString();
+	if (odLoadPhoto->Execute())
+	{
+		crtProfilePhoto->Fill->Bitmap->Bitmap->LoadFromFile(odLoadPhoto->FileName);
+	}
 }
 //---------------------------------------------------------------------------
 

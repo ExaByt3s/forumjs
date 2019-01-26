@@ -19,7 +19,7 @@ public:
 
 	ExceptionHandler StartSession(refStr nickname, refStr password);
 	ExceptionHandler RegisterUser(refStr nickname, refStr lastname,
-				  refStr firstname, refStr email, refStr password, TBitmap *bm);
+				  refStr firstname, refStr email, refStr password);
 
 	// ExceptionHandler for hilo
 	ExceptionHandler _th_eh;

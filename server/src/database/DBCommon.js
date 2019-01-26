@@ -61,6 +61,7 @@ class DBCommon
             [2] = firstname
             [3] = email
             [4] = password      hash 512 (128 length)
+            [5] = path_img
          */
         try {
             // check user existen
@@ -78,6 +79,7 @@ class DBCommon
         
             await this.ExecQry(query);
 
+            // Add password login.
             let id = await this.GetUserIdByEmail(args[3]);
             let token = GenerateToken(id);
             let pass_encrypt = secure.mkHashSHA512(args[4]);
@@ -88,6 +90,12 @@ class DBCommon
                                 DateToMysqlFormat() + "');";
         
             await this.ExecQry(query);
+
+            // Add profile photo.
+            query = "INSERT INTO `profiles`(`ac_id`,`image_p`) " +
+                    "VALUES(" + id + ", " + args[5] + ");";
+            await this.ExecQry(query);
+
             return true;
         } catch (err) {
             if (!(err instanceof PersonalException)) {
@@ -202,6 +210,23 @@ class DBCommon
                     return -1;  // no existe
             } else {
                 return rows[0].acc_id;
+            }
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetUserImage(id) {
+        try {
+            if (!nickname) throw "know't";
+            let rows = await this.ExecQry("SELECT `image_p` FROM `profiles` WHERE `ac_id` = " + id + ";");
+            if (!rows.length) {
+                throw new PersonalException(`Not found image`, 'GetUserImage', -11);
+            } else {
+                return rows[0].image_p;
             }
         } catch (err) {
             if (!(err instanceof PersonalException)) {
