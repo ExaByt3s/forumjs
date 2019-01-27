@@ -15,6 +15,7 @@ User::User()
 {
 }
 
+
 User::User(User&& user)
 	: EntityBase()
 	, _nickname("")

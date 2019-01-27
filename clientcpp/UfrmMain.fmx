@@ -4,7 +4,7 @@ object frmMain: TfrmMain
   Border.Styling = False
   BorderIcons = []
   BorderStyle = None
-  Caption = 'Form1'
+  Caption = 'ForumDev'
   ClientHeight = 480
   ClientWidth = 640
   Position = ScreenCenter
