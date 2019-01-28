@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const svm = require('./svmethods');
+const svm = require('../controllers/svmethods');
 
 const svm_router = new Router();
 

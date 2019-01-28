@@ -1,12 +1,10 @@
-const db = require('../database/DBCommon');
-const { PersonalException, checkFieldInJson } = require('../lib/utilities');
-const sec = ('../lib/secure_utils');
 const path = require('path');
 const uuid = require('uuid/v1');
 
-/*
-    Construir el cliente
- */
+const db = require('../database/DBCommon');
+const srt = require('../lib/secure_utils');
+const { checkFieldInJson } = require('../lib/utilities');
+const { PersonalException } = require('../lib/exception_handler');
 
 const methods = {};
 
@@ -108,8 +106,9 @@ methods.register_user = async (req) => {
         // process img
         let path_img = 'none';
         if (req.body.image != '') {
-            path_img = path.join('/storage/images/profile/' + uuid());
-            sec.base64_decode(req.body.image, path_img);
+            //path_img = path.join(__dirname + '/storage/images/profile/' + uuid());
+            path_img = 'storage/images/profile/' + uuid() + '.img';
+            srt.decode64(req.body.image, path_img); 
         }
 
         let result = await db.RegisterUser([
@@ -249,7 +248,7 @@ methods.push_article = async (req) => {
         let path_img = 'none'; 
         if (image_p != '') {
             path_img = path.join('storage/images/articles/' + uuid());
-            sec.base64_decode(req.body.image_p, path_img);
+            b64_decode(req.body.image_p, path_img);
         }
         let result = await db.PushArticle([
             req.body.ac_id,
@@ -309,7 +308,7 @@ methods.get_articles = async (req) => {
                 range: row.range,
                 title: row.title,
                 description: row.description,
-                imagebase64: sec.base64_encode(row.image_p),
+                imagebase64: srt.encode64(row.image_p),
                 create_at: row.create_at
             });
         }
@@ -360,7 +359,7 @@ methods.get_articles = async (req) => {
                 range: row.range,
                 title: row.title,
                 description: row.description,
-                imagebase64: sec.base64_encode(row.image_p),
+                imagebase64: srt.encode64(row.image_p),
                 create_at: row.create_at
             });
         }
@@ -392,7 +391,7 @@ methods.get_userphoto = async (req) => {
     if (!check[0]) return check[1];
     try {
         let row = await db.GetUserImage(req.body.id_user);
-        let b64 = sec.base64_encode(row);
+        let b64 = encode64(row);
         return { codError: 0, image: b64 };
     } catch (err) {
         if (err instanceof PersonalException) {

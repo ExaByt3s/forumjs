@@ -1,7 +1,8 @@
 const mysql = require('promise-mysql');
 const config_db = require('./db_config');
-const { GenerateToken, DateToMysqlFormat, PersonalException } = require('../lib/utilities');
-const secure = require('../lib/secure_utils');
+const util = require('../lib/utilities');
+const { PersonalException } = require('../lib/exception_handler');
+const srt = require('../lib/secure_utils');
 
 class DBCommon
 {
@@ -39,7 +40,7 @@ class DBCommon
             let rows = await this.ExecQry(query);
             if (!rows.length)
                 throw new PersonalException(``, '', '');
-            let pass_encrypt = secure.mkHashSHA512(args[1]);
+            let pass_encrypt = obj_sec.mkHashSHA512(args[1]);
             query = "SELECT `ac_id` FROM `login` WHERE `password` = '" + pass_encrypt + "';";
             rows = await this.ExecQry(query);
             if (!rows.length)
@@ -81,19 +82,19 @@ class DBCommon
 
             // Add password login.
             let id = await this.GetUserIdByEmail(args[3]);
-            let token = GenerateToken(id);
-            let pass_encrypt = secure.mkHashSHA512(args[4]);
+            let token = srt.GenerateToken(id);
+            let pass_encrypt = srt.mkHashSHA512(args[4]);
             query = "INSERT INTO `login`(`ac_id`,`password`,`token`,`lastlog`) " +
                     "VALUES(" + id + ",'" +
                                 pass_encrypt + "','" +
                                 token + "','" +
-                                DateToMysqlFormat() + "');";
+                                util.DateToMysqlFormat() + "');";
         
             await this.ExecQry(query);
 
             // Add profile photo.
             query = "INSERT INTO `profiles`(`ac_id`,`image_p`) " +
-                    "VALUES(" + id + ", " + args[5] + ");";
+                    "VALUES(" + id + ", '" + args[5] + "');";
             await this.ExecQry(query);
 
             return true;
@@ -287,7 +288,7 @@ class DBCommon
     async UpdateUserToken(id) {
         try {
             if (!id) throw "know't";
-            let new_token = GenerateToken(id);
+            let new_token = srt.GenerateToken(id);
             let rows = await this.ExecQry("UPDATE `login` SET `token` = '" + new_token + 
                                           "' WHERE `ac_id` = " + id + ";");
             if (!rows.affectedRows)

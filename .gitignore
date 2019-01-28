@@ -4,6 +4,8 @@
 *.cpp.*
 *.h.*
 
+server/storage
+
 clientcpp/__history
 clientcpp/__recovery
 clientcpp/Win32

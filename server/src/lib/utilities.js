@@ -1,50 +1,28 @@
-const secure = require('./secure_utils');
 
-function twoDigits(d) {
-    if(0 <= d && d < 10) return '0' + d.toString();
-    if(-10 < d && d < 0) return '-0' + (-1*d).toString();
-    return d.toString();
+const util = {};
+
+util.twoDigits = (d) => {
+    
 }
 
-function DateToMysqlFormat() {
+util.DateToMysqlFormat = () => {
+    let twoDigits = (d) => {
+        if(0 <= d && d < 10) return '0' + d.toString();
+        if(-10 < d && d < 0) return '-0' + (-1*d).toString();
+        return d.toString();
+    }
+
     let result;
     with (new Date()) {
         result = getUTCFullYear() + "-" + twoDigits(1 + getUTCMonth()) + "-" +
             twoDigits(getUTCDate()) + " " + twoDigits(getUTCHours()) + ":" +
             twoDigits(getUTCMinutes()) + ":" + twoDigits(getUTCSeconds());
-    }
+    } 
+    
     return result;
 };
 
-function GenerateToken(id) {
-    let years = 1000 * 60 * 60 * 24 * 365;
-    let token = secure.mkHashSHA512(id + Math.round(new Date().getTime() / years));
-    return token;
-}
-
-class PersonalException {
-    constructor(msg, ref_fn, cerror) {
-        this.excp = {
-            message: msg,
-            reference: ref_fn,
-            codError: cerror
-        };
-    }
-
-    GetMessage() {
-        return this.excp.message;
-    }
-
-    GetRef() {
-        return this.excp.reference;
-    }
-
-    GetExceptionToJson() {
-        return { codError: this.excp.codError };
-    }
-}
-
-function checkFieldInJson(body, fields) {
+util.checkFieldInJson = (body, fields) => {
     if (!body) 
         throw new PersonalException(`JSON Invalid`, 'checkFieldInJson', '-4');
     let fieldsj = Object.keys(body);
@@ -54,9 +32,4 @@ function checkFieldInJson(body, fields) {
     }
 }
 
-module.exports = {
-    // funcs 
-    GenerateToken, DateToMysqlFormat, checkFieldInJson,
-    // classes
-    PersonalException 
-};
+module.exports = util;
