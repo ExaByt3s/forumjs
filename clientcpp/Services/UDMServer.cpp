@@ -17,6 +17,7 @@ TdmData *dmData;
 //---------------------------------------------------------------------------
 __fastcall TdmData::TdmData(TComponent* Owner)
 	: TDataModule(Owner)
+	, _user(new User())
 {
 }
 //---------------------------------------------------------------------------
@@ -72,9 +73,13 @@ ExceptionHandler TdmData::Login(refStr nickname, refStr password)
 		if (codError)
 			throw ExceptionHandler();
 
-		_user.Nickname = nickname;
-		_user.Password = pass;
-		_user.Token = res->GetValue("token")->Value();
+		_user->Id = StrToInt(res->GetValue("id")->Value());
+		_user->Nickname = nickname;
+		_user->Password = pass;
+		_user->Token = res->GetValue("token")->Value();
+
+		GetUserPhoto(_User()->Id);
+
 		return ExceptionHandler(true);
 	}
 	catch (ExceptionHandler& e)
@@ -96,14 +101,14 @@ ExceptionHandler TdmData::SignIn(refStr nickname, refStr lastname,
 	body->AddPair("email", email);
 	body->AddPair("password", pass);
 	std::unique_ptr<TBytesStream> b(new TBytesStream(TBytes()));
-    bm->SaveToStream(b.get());
+	bm->SaveToStream(b.get());
 	body->AddPair("image", TEncryp::B64Encode(b.get()));
 	res.reset(ExecREST("signin", body).release());
 	int codError = StrToInt(res->GetValue("codError")->Value());
 
 	try
 	{
-        if (codError)
+		if (codError)
 			throw ExceptionHandler();
 
 		return ExceptionHandler(true);
@@ -112,6 +117,48 @@ ExceptionHandler TdmData::SignIn(refStr nickname, refStr lastname,
 	{
 		return ExceptionHandler(false, codError, "TdmData::SignIn");
 	}
+}
+//---------------------------------------------------------------------------
+
+ExceptionHandler TdmData::GetUserPhoto(int id)
+{
+	UPtrJSONObject body(new TJSONObject());
+	UPtrJSONObject res;
+	body->AddPair("id", _User()->Id);
+	body->AddPair("token", _User()->Token);
+	body->AddPair("id_usr", id);
+	res.reset(ExecREST("getuserphoto", body).release());
+    int codError = StrToInt(res->GetValue("codError")->Value());
+
+    try
+	{
+		if (codError)
+			throw ExceptionHandler();
+
+		std::unique_ptr<TBytesStream> b(TEncryp::B64Decode(res->GetValue("image")->Value()));
+        b->Position = 0;
+		std::unique_ptr<TBitmap> bmp(new TBitmap());
+		bmp->LoadFromStream(b.get());
+		_user->Image = bmp.release();
+		return ExceptionHandler(true);
+	}
+	catch (ExceptionHandler& e)
+	{
+		return ExceptionHandler(false, codError, "TdmData::GetUserPhoto");
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TdmData::DataModuleDestroy(TObject *Sender)
+{
+	if (_user) delete _user;
+	_user = nullptr;
+}
+//---------------------------------------------------------------------------
+
+User* const TdmData::_User() const
+{
+    return _user;
 }
 //---------------------------------------------------------------------------
 

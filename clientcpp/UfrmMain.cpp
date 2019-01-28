@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "UfrmMain.h"
+#include "Services/UDMServer.h"
 
 // views
 #include "Views/UfrmLogin.h"
@@ -37,7 +38,11 @@ void __fastcall TfrmMain::btnok_promptClick(TObject *Sender)
 
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
+	// Iniciar los micro-services
+	dmData = new TdmData(this);
+    // Vista por defecto.
 	GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyViewLayout");
+    // Cargando closure necesarios para el manejo entre vistas.
 	ViewsBase::viewsBase->fn_dispatch = &cl_Dispatch_Event;
     ViewsBase::viewsBase->fn_prompt = &cl_Prompt_View;
 }
@@ -54,6 +59,8 @@ void __fastcall TfrmMain::cl_Dispatch_Event(EventViews ev)
 	} break;
 	case LOGOUT_SESSION:
 	{
+        SAFE_POINTER(dmData);
+        dmData = new TdmData(this);
 		GetView(__classid(TfrmLogin), lyLogin, FActiveForm, "lyViewLayout");
 		tbMain->GotoVisibleTab(0);
 	} break;

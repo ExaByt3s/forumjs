@@ -1,10 +1,16 @@
 *.pch
 *.obj
+*.dcu
+*.exe
 *.dfm.*
 *.cpp.*
 *.h.*
 
 server/storage
+
+clientpas/__history
+clientpas/__recovery
+clientpas/Win32
 
 clientcpp/__history
 clientcpp/__recovery

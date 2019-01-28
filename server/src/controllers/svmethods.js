@@ -63,6 +63,7 @@ Request:
 Response:
     {
         codError:
+        id:
         token: [new_token] 
     }
  */
@@ -72,7 +73,7 @@ methods.login_user = async (req) => {
     try {
         let id = await db.LoginUser([req.body.nickname, req.body.password]);
         let new_token = await db.UpdateUserToken(id);
-        return { codError: 0, token: new_token };
+        return { codError: 0, id: id, token: new_token };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
@@ -390,8 +391,8 @@ methods.get_userphoto = async (req) => {
     check = await checkToken(req.body);
     if (!check[0]) return check[1];
     try {
-        let row = await db.GetUserImage(req.body.id_user);
-        let b64 = encode64(row);
+        let row = await db.GetUserImage(req.body.id_usr);
+        let b64 = srt.encode64(row);
         return { codError: 0, image: b64 };
     } catch (err) {
         if (err instanceof PersonalException) {

@@ -25,9 +25,9 @@ __published:	// IDE-managed Components
 	TLayout *lyArticlesboard;
 	TLayout *lyRegionMV;
 	TRectangle *rctDashboard;
-	TImage *imgProfileImg;
 	TButton *btnrtnprofile;
 	TLabel *lblnameprofile;
+	TCircle *crlProfilePhoto;
 	void __fastcall btnrtnprofileClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations

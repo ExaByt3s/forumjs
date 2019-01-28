@@ -1,0 +1,70 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object lyMainView: TLayout
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+  end
+  object lyPrompt: TLayout
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    TabOrder = 1
+    object rctBackground: TRectangle
+      Align = Client
+      Fill.Color = x96000000
+      Size.Width = 640.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object rctPanel: TRectangle
+        Align = Center
+        Size.Width = 350.000000000000000000
+        Size.Height = 200.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object lblpromptmsg: TLabel
+          Align = Top
+          Margins.Left = 15.000000000000000000
+          Margins.Top = 15.000000000000000000
+          Margins.Right = 15.000000000000000000
+          Position.X = 15.000000000000000000
+          Position.Y = 15.000000000000000000
+          Size.Width = 320.000000000000000000
+          Size.Height = 106.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.VertAlign = Leading
+          Text = 'Label1'
+          TabOrder = 0
+        end
+        object btnokprompt: TButton
+          Align = Top
+          Margins.Left = 50.000000000000000000
+          Margins.Top = 20.000000000000000000
+          Margins.Right = 50.000000000000000000
+          Position.X = 50.000000000000000000
+          Position.Y = 141.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Accept'
+          OnClick = btnokpromptClick
+        end
+      end
+    end
+  end
+end

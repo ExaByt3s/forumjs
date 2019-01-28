@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 300
   Top = 80
   Border.Styling = False
-  BorderIcons = []
-  BorderStyle = None
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = Single
   Caption = 'ForumDev'
   ClientHeight = 480
   ClientWidth = 640
@@ -24,16 +24,16 @@ object frmMain: TfrmMain
     object tbMain: TTabControl
       Align = Client
       Size.Width = 640.000000000000000000
-      Size.Height = 450.000000000000000000
+      Size.Height = 480.000000000000000000
       Size.PlatformDefault = False
       TabIndex = 0
       TabOrder = 0
       TabPosition = None
       Sizes = (
         640s
-        450s
+        480s
         640s
-        450s)
+        480s)
       object tbiLogin: TTabItem
         CustomIcon = <
           item
@@ -50,7 +50,7 @@ object frmMain: TfrmMain
         object lyLogin: TLayout
           Align = Client
           Size.Width = 640.000000000000000000
-          Size.Height = 450.000000000000000000
+          Size.Height = 480.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
         end
@@ -71,7 +71,7 @@ object frmMain: TfrmMain
         object lyApplication: TLayout
           Align = Client
           Size.Width = 640.000000000000000000
-          Size.Height = 450.000000000000000000
+          Size.Height = 480.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
         end
@@ -133,6 +133,7 @@ object frmMain: TfrmMain
       Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
+      Visible = False
       object btnQuit: TButton
         Align = Right
         Margins.Top = 5.000000000000000000

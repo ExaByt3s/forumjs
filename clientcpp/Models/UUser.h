@@ -19,8 +19,8 @@ public:
 	User();
 	User(User&& user);
 	User(int id, int range, refStr nickname, refStr password,
-		 refStr email, refStr token, std::unique_ptr<TBitmap>&& img);
-	~User();
+		 refStr email, refStr token, TBitmap *img);
+	virtual ~User();
 
 	User& operator=(User&& user);
 

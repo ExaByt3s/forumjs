@@ -12,6 +12,7 @@ ExceptionHandler::ExceptionHandler()
 	: _response(false)
 	, _codError(0)
 	, _method("")
+	, _resource(nullptr)
 {
 }
 
@@ -23,7 +24,8 @@ ExceptionHandler::ExceptionHandler(ExceptionHandler&& eh)
 ExceptionHandler::ExceptionHandler(bool res)
 	: _response(res)
 	, _codError(0)
-    , _method("")
+	, _method("")
+	, _resource(nullptr)
 {
 }
 
@@ -31,7 +33,22 @@ ExceptionHandler::ExceptionHandler(bool res, int CodError, refUStr Method)
 	: _response(res)
 	, _codError(CodError)
 	, _method(Method)
+	, _resource(nullptr)
 {
+}
+
+ExceptionHandler::ExceptionHandler(bool res, void* data)
+	: _response(res)
+	, _codError(0)
+	, _method("")
+	, _resource(data)
+{
+}
+
+ExceptionHandler::~ExceptionHandler()
+{
+	if (_resource) delete _resource;
+    _resource = nullptr;
 }
 
 ExceptionHandler& ExceptionHandler::operator=(ExceptionHandler&& eh)
@@ -39,6 +56,7 @@ ExceptionHandler& ExceptionHandler::operator=(ExceptionHandler&& eh)
 	Response = eh.Response;
 	CodError = eh.CodError;
 	_method = eh._method;
+    memcpy(Resource, eh.Resource, sizeof(*eh.Resource));
     return *this;
 }
 

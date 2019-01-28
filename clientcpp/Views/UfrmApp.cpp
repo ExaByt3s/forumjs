@@ -27,13 +27,16 @@ void __fastcall TfrmApp::btnrtnprofileClick(TObject *Sender)
 
 void __fastcall TfrmApp::LoadProfile()
 {
-    lblnameprofile->Text = dmData->UserData.Nickname;
+	lblnameprofile->Text = dmData->_User()->Nickname;
+    crlProfilePhoto->Fill->Bitmap->Bitmap = dmData->_User()->Image;
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmApp::FormCreate(TObject *Sender)
 {
-    LoadProfile();
+	TThread::Synchronize(TThread::Current, [this]() {
+		LoadProfile();
+	});
 }
 //---------------------------------------------------------------------------
 

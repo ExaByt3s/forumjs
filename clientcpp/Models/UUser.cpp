@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "UUser.h"
+#include "../Controllers/UUtilities.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
@@ -27,8 +28,8 @@ User::User(User&& user)
 }
 
 User::User(int id, int range, refStr nickname, refStr password,
-		refStr email, refStr token, std::unique_ptr<TBitmap>&& img)
-	: EntityBase(id, range, std::move(img))
+		refStr email, refStr token, TBitmap *img)
+	: EntityBase(id, range, img)
 	, _nickname(nickname)
 	, _password(password)
 	, _email(email)
@@ -45,7 +46,7 @@ User& User::operator=(User&& user)
 	this->~User();
 	Id = user.Id;
 	Range = user.Range;
-	SetImage(std::move(user.GetPtrImage()));
+    MemCopy<TBitmap>(Image, user.Image);
 	Nickname = user.Nickname;
 	Password = user.Password;
 	Email = user.Email;

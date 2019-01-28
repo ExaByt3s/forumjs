@@ -24,13 +24,17 @@ using refStr = const String&;
 class TdmData : public TDataModule
 {
 __published:	// IDE-managed Components
+	void __fastcall DataModuleDestroy(TObject *Sender);
 private:	// User declarations
 	std::mutex _m_execrest;
-    User _user;
+	User* _user;
 
 	// methods REQUEST REST API
 	UPtrJSONObject ExecREST(String method, const UPtrJSONObject& body);
 public:		// User declarations
+    // propertys
+	User* const _User() const;
+
 	__fastcall TdmData(TComponent* Owner);
 
     // Login & Signin
@@ -38,10 +42,10 @@ public:		// User declarations
 	ExceptionHandler SignIn(refStr nickname, refStr lastname,
 				  refStr firstname, refStr email, refStr password, TBitmap *bm);
 
-	// Articles
+	// Getter
+    ExceptionHandler GetUserPhoto(int id);
 
-	// propertys
-	__property User UserData = { read=_user };
+	// Articles
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TdmData *dmData;

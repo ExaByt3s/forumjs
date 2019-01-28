@@ -3,33 +3,38 @@
 #pragma hdrstop
 
 #include "UEntityBase.h"
+#include "../Controllers/UUtilities.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
 EntityBase::EntityBase()
 	: Id(0)
 	, Range(0)
+	, Image(nullptr)
 {
-    _image.reset(nullptr);
 }
 
 EntityBase::EntityBase(EntityBase&& other)
 	: Id(0)
 	, Range(0)
+    , Image(nullptr)
 {
     *this = std::move(other);
 }
 
-EntityBase::EntityBase(int id, int range, std::unique_ptr<TBitmap>&& img)
+EntityBase::EntityBase(int id, int range, TBitmap* img)
 {
 	Id = id;
 	Range = range;
-	_image.reset(img.release());
+	MemCopy<TBitmap>(Image, img);
 }
 
 EntityBase::~EntityBase()
 {
-    _image.reset(nullptr);
+	if (_image) {
+		_image->DisposeOf();
+        _image = nullptr;
+	}
 }
 
 EntityBase& EntityBase::operator=(EntityBase&& other)
@@ -37,27 +42,12 @@ EntityBase& EntityBase::operator=(EntityBase&& other)
 	this->~EntityBase();
 	Id = other.Id;
 	Range = other.Range;
-	_image.reset(other.ReleaseImage());
+    MemCopy<TBitmap>(Image, other.Image);
 	return *this;
 }
 
-void EntityBase::SetImage(std::unique_ptr<TBitmap>&& other)
+void __fastcall EntityBase::PutImage(TBitmap *img)
 {
-	_image.reset(other.release());
-}
-
-TBitmap* EntityBase::GetImage()
-{
-	return _image.get();
-}
-
-std::unique_ptr<TBitmap>& EntityBase::GetPtrImage()
-{
-    return _image;
-}
-
-TBitmap* EntityBase::ReleaseImage()
-{
-	return _image.release();
+	MemCopy<TBitmap>(Image, img);
 }
 

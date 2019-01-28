@@ -49,9 +49,9 @@ void __fastcall TfrmLogin::btnstartsessionClick(TObject *Sender)
 		);
 		bool result = eh.Response;
         String msg = eh.ProcessCodError();
-        TThread::Sleep(2000);
+		TThread::Sleep(1000);
 
-		TThread::Synchronize(TThread::Current, [this, result, msg]() {
+		TThread::Synchronize(nullptr, [this, result, msg]() {
 			Loading(false);
 			if (!result)
 			{
@@ -85,7 +85,7 @@ void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 		bool result = eh.Response;
 		String msg = eh.ProcessCodError();
 
-		TThread::Sleep(2000);
+		TThread::Sleep(1000);
 
 		TThread::Synchronize(TThread::Current, [this, result, msg]() {
 			Loading(false);
@@ -94,14 +94,13 @@ void __fastcall TfrmLogin::btnsignin_sClick(TObject *Sender)
 				ViewsBase::viewsBase->PromptMsg(msg);
 				return;
 			}
-			tbLogSign->Previous();
+			btnstartsession_sClick(nullptr); // Go to login.
 		});
 	});
 	t->FreeOnTerminate = true;
 	t->Start();
 }
 //---------------------------------------------------------------------------
-
 
 void __fastcall TfrmLogin::Loading(bool interruptor)
 {

@@ -14,23 +14,21 @@ class EntityBase
 public:
 	EntityBase();
 	EntityBase(EntityBase&&);
-	EntityBase(int id, int range, std::unique_ptr<TBitmap>&& img);
+	EntityBase(int id, int range, TBitmap *img);
 	virtual ~EntityBase();
 
-    EntityBase& operator=(EntityBase&&);
+	EntityBase& operator=(EntityBase&&);
 
-	void SetImage(std::unique_ptr<TBitmap>&& other);
-	TBitmap* GetImage();
-    std::unique_ptr<TBitmap>& GetPtrImage();
-    TBitmap* ReleaseImage();
+    void __fastcall PutImage(TBitmap *img);
 
 	__property int Id = { read=_id, write=_id };
 	__property int Range = { read=_range, write=_range };
+    __property TBitmap* Image = { read=_image, write=_image };
 
 private:
 	int _id;
     int _range;
-	std::unique_ptr<TBitmap> _image;
+	TBitmap *_image;
 };
 
 #endif

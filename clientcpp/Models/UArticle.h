@@ -8,8 +8,6 @@
 #include <System.SysUtils.hpp>
 
 #include "UEntityBase.h"
-
-#include <memory>
 //---------------------------------------------------------------------------
 
 using refStr = const String&;
@@ -19,7 +17,7 @@ class Article : public EntityBase
 public:
 	Article();
 	Article(Article&&);
-	Article(std::unique_ptr<TBitmap>&& img, int id, int range, refStr title,
+	Article(TBitmap *img, int id, int range, refStr title,
 			refStr desc, TDateTime create_at);
 	~Article();
 

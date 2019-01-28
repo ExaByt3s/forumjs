@@ -40,7 +40,7 @@ class DBCommon
             let rows = await this.ExecQry(query);
             if (!rows.length)
                 throw new PersonalException(``, '', '');
-            let pass_encrypt = obj_sec.mkHashSHA512(args[1]);
+            let pass_encrypt = srt.mkHashSHA512(args[1]);
             query = "SELECT `ac_id` FROM `login` WHERE `password` = '" + pass_encrypt + "';";
             rows = await this.ExecQry(query);
             if (!rows.length)
@@ -222,7 +222,7 @@ class DBCommon
 
     async GetUserImage(id) {
         try {
-            if (!nickname) throw "know't";
+            if (!id) throw "know't No hay id";
             let rows = await this.ExecQry("SELECT `image_p` FROM `profiles` WHERE `ac_id` = " + id + ";");
             if (!rows.length) {
                 throw new PersonalException(`Not found image`, 'GetUserImage', -11);
@@ -231,6 +231,7 @@ class DBCommon
             }
         } catch (err) {
             if (!(err instanceof PersonalException)) {
+                console.error(err);
                 throw "know't";
             }
             throw err;
@@ -296,6 +297,7 @@ class DBCommon
             return new_token;
         } catch (err) {
             if(!(err instanceof PersonalException)) {
+                console.error(err + 'checkeando');
                 throw "know't";
             }
             throw err;

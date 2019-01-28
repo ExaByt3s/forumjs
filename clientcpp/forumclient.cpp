@@ -10,9 +10,9 @@
 USEFORM("Views\UfrmApp.cpp", frmApp);
 USEFORM("UfrmMain.cpp", frmMain);
 USEFORM("Services\UDMServer.cpp", dmData); /* TDataModule: File Type */
-USEFORM("Views\UfrmArticleboard.cpp", frmArticleboard);
 USEFORM("Views\UfrmUtilities.cpp", frmUtilities);
 USEFORM("Views\UfrmLogin.cpp", frmLogin);
+USEFORM("Views\UfrmArticleboard.cpp", frmArticleboard);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -20,7 +20,6 @@ extern "C" int FMXmain()
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
-		Application->CreateForm(__classid(TdmData), &dmData);
 		Application->Run();
 	}
 	catch (Exception &exception)

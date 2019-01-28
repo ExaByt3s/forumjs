@@ -24,6 +24,8 @@ enum CODE_ERROR
     CONNECTION_ERROR = -999,
 };
 
+// define
+#define SAFE_POINTER(x) if ((x)) delete (x); (x) = nullptr
 
 // Hash 512
 String MakeHash512(const String& text);
@@ -31,5 +33,12 @@ String MakeHash512(const String& text);
 // Get Views
 void __fastcall GetView(const TComponentClass aForm, TLayout *Parent,
 						TForm *ref, const String& component);
+
+// Copy two pointer
+template<typename T>
+void __fastcall MemCopy(void *dst, void *src)
+{
+	memcpy(dst, src, sizeof(T));
+}
 
 #endif
