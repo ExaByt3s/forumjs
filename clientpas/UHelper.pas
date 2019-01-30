@@ -5,15 +5,15 @@ interface
 uses
   System.JSON, System.Classes, System.StrUtils, IdCoderMIME;
 
-function GetJArrayRow(org: TJSONValue; val: string): TJSONObject;
+procedure GetJArrayRow(org: TJSONValue; val: string; out res: TJSONObject);
 function B64Encode(bs: TBytesStream): string;
-function B64Decode(src: string): TBytesStream;
+procedure B64Decode(src: string; var stream: TBytesStream);
 
 implementation
 
-  function GetJArrayRow(org: TJSONValue; val: string): TJSONObject;
+  procedure GetJArrayRow(org: TJSONValue; val: string; out res: TJSONObject);
   begin
-    Result := org.GetValue<TJSONObject>(val);
+    res := org.GetValue<TJSONObject>(val);
   end;
 
   function B64Encode(bs: TBytesStream): string;
@@ -22,13 +22,9 @@ implementation
     Result := TIdEncoderMIME.EncodeStream(bs);
   end;
 
-  function B64Decode(src: string): TBytesStream;
-  var
-    LRes: TBytesStream;
+  procedure B64Decode(src: string; var stream: TBytesStream);
   begin
-    LRes := TBytesStream.Create();
-    TIdDecoderMIME.DecodeStream(src, LRes);
-    LRes.Position := 0;
-    Result := LRes;
+    TIdDecoderMIME.DecodeStream(src, stream);
+    stream.Position := 0;
   end;
 end.

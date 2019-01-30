@@ -25,6 +25,7 @@ type
     btnokprompt: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnokpromptClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FActiveForm: TForm;
     { Private declarations }
@@ -47,6 +48,13 @@ begin
   lyPrompt.Visible := False;
 end;
 
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  dmData.Free;
+  cSession.Free;
+  viewMgr.Free;
+end;
+
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   FActiveForm := nil;
@@ -67,14 +75,13 @@ begin
   case viewtype of
     START_SESSION:
       begin
-        GetViews(TfrmApp, lyMainView, FActiveForm, 'lyViewApp');
+        GetViews(TfrmApp, lyMainView, &FActiveForm, 'lyViewApp');
       end;
     LOGOUT_SESSION:
       begin
-        dmData.DisposeOf;
-        dmData := nil;
+        FreeAndNil(dmData);
         dmData := TdmData.Create(Self);
-        GetViews(TfrmViewSession, lyMainView, FActiveForm, 'lyViewSession');
+        GetViews(TfrmViewSession, lyMainView, &FActiveForm, 'lyViewSession');
       end;
   end;
 end;

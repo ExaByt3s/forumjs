@@ -39,6 +39,8 @@ object frmApp: TfrmApp
         StyleLookup = ''
         TabOrder = 0
         Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
         object lyViewArticle: TLayout
           Align = Right
           Position.X = 180.000000000000000000
@@ -108,6 +110,8 @@ object frmApp: TfrmApp
         StyleLookup = ''
         TabOrder = 0
         Text = 'TabItem2'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
       end
     end
   end

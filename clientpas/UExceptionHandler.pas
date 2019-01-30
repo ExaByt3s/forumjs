@@ -30,24 +30,24 @@ implementation
 
 constructor TExceptionHandler.Create;
 begin
-  Response := True;
-  CodError := 0;
-  Method := '';
+  FResponse := True;
+  FCodError := 0;
+  FMethod := '';
 end;
 
 constructor TExceptionHandler.Create(res: Boolean);
 begin
-  Response := res;
-  CodError := 0;
-  Method := '';
+  FResponse := res;
+  FCodError := 0;
+  FMethod := '';
 end;
 
 constructor TExceptionHandler.Create(res: Boolean; cerror: Integer;
   method: string);
 begin
-  Response := res;
-  CodError := cerror;
-  Method := method;
+  FResponse := res;
+  FCodError := cerror;
+  FMethod := method;
 end;
 
 function TExceptionHandler.ProcessCodError: string;

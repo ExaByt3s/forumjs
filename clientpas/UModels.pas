@@ -10,7 +10,7 @@ type
     private
       var
         FId: Integer;
-        FImage: TBitmap;
+   //     FImage: TBitmap;
     public
       constructor Create; overload;
       constructor Create(pId: Integer; pImage: TBitmap); overload;
@@ -18,7 +18,7 @@ type
 
       // properties
       property Id: Integer read FId write FId;
-      property Image: TBitmap read FImage write FImage;
+  //    property Image: TBitmap read FImage write FImage;
   end;
 
   TUser = class(TEntity)
@@ -31,6 +31,7 @@ type
     public
       constructor Create; overload;
       constructor Create(pNickname: string; pPassword: string; pEmail: string); overload;
+      destructor Destroy; virtual;
 
       // properties
       property Nickname: string read FNickname write FNickname;
@@ -57,19 +58,19 @@ implementation
 constructor TEntity.Create(pId: Integer; pImage: TBitmap);
 begin
   FId := pId;
-  FImage := TBitmap.Create;
-  FImage.CopyFromBitmap(pImage);
+//  FImage := TBitmap.Create;
+//  FImage.CopyFromBitmap(pImage);
 end;
 
 destructor TEntity.Destroy;
 begin
-  FImage.DisposeOf;
+//  FImage.DisposeOf;
 end;
 
 constructor TEntity.Create;
 begin
   FId := 0;
-  FImage := TBitmap.Create;
+//  FImage := TBitmap.Create;
 end;
 
 { TUser }
@@ -80,6 +81,11 @@ begin
   FNickname := pNickname;
   FPassword := pPassword;
   FEmail := pEmail;
+end;
+
+destructor TUser.Destroy;
+begin
+  TEntity(Self).Destroy;
 end;
 
 constructor TUser.Create;

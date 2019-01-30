@@ -12,18 +12,15 @@ type
   TCSession = class(TObject)
     private
       var
-        FEh: TExceptionHandler;
     public
       constructor Create;
       destructor Destroy; virtual;
 
       // start session async
-      function StartSession(const nickname, password: string): TExceptionHandler;
-      function RegisterUser(const nickname, lastname, firstname, email, pass: string;
-                            bmp: TBitmap): TExceptionHandler;
-
-      // property
-      property ExceptionH: TExceptionHandler read FEh write FEh;
+      procedure StartSession(const nickname, password: string;
+                              var exc: TExceptionHandler);
+      procedure RegisterUser(const nickname, lastname, firstname, email, pass: string;
+                            bmp: TBitmap; var exc: TExceptionHandler);
   end;
 
 var
@@ -35,25 +32,22 @@ implementation
 
 constructor TCSession.Create;
 begin
-  FEh := TExceptionHandler.Create;
 end;
 
 destructor TCSession.Destroy;
 begin
-  FEh.DisposeOf;
 end;
 
-function TCSession.RegisterUser(const nickname, lastname, firstname, email,
-  pass: string; bmp: TBitmap): TExceptionHandler;
+procedure TCSession.RegisterUser(const nickname, lastname, firstname, email, pass: string;
+                            bmp: TBitmap; var exc: TExceptionHandler);
 begin
-  FEh := dmData.SignIn(nickname, lastname, firstname, email, pass, bmp);
-  Result := FEh;
+  dmData.SignIn(nickname, lastname, firstname, email, pass, bmp, exc);
 end;
 
-function TCSession.StartSession(const nickname, password: string): TExceptionHandler;
+procedure TCSession.StartSession(const nickname, password: string;
+                              var exc: TExceptionHandler);
 begin
-  FEh := dmData.LogIn(nickname, password);
-  Result := FEh;
+  dmData.LogIn(nickname, password, exc);
 end;
 
 end.

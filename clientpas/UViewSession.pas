@@ -48,7 +48,6 @@ type
     procedure FormCreate(Sender: TObject);
   private
     FActiveForm: TForm;
-    FExh: TExceptionHandler;
   public
     // Loading
     procedure Loading(active: Boolean);
@@ -70,8 +69,10 @@ begin
     var
       ex: TExceptionHandler;
     begin
-      ex := cSession.RegisterUser(txtusername_s.Text, txtfn_s.Text,
-        txtln_s.Text, txtemail_s.Text, txtpass_s.Text, crlProfilePhoto.Fill.Bitmap.Bitmap);
+      ex := TExceptionHandler.Create;
+      cSession.RegisterUser(txtusername_s.Text, txtfn_s.Text,
+        txtln_s.Text, txtemail_s.Text, txtpass_s.Text,
+        crlProfilePhoto.Fill.Bitmap.Bitmap, ex);
       TThread.Sleep(1000);
       TThread.Synchronize(TThread.Current,
         procedure
@@ -79,13 +80,14 @@ begin
           if ex.Response then
           begin
             Loading(False);
-            ex.DisposeOf;
             lblloginClick(nil)
           end
           else
-            viewMgr.PromptMsg(FExh.ProcessCodError);
+            viewMgr.PromptMsg(ex.ProcessCodError);
+
         end
       );
+      ex.DisposeOf;
     end
   );
   th.FreeOnTerminate := True;
@@ -102,21 +104,20 @@ begin
     var
       ex: TExceptionHandler;
     begin
-      ex := cSession.StartSession(txtusername.Text, txtpassword.Text);
+      ex := TExceptionHandler.Create;
+      cSession.StartSession(txtusername.Text, txtpassword.Text, ex);
       TThread.Sleep(1000);
       TThread.Synchronize(TThread.Current,
         procedure
         begin
           Loading(False);
           if ex.Response then
-          begin
-            ex.DisposeOf;
-            viewMgr.LaunchView(TViewType.START_SESSION);
-          end
+            viewMgr.LaunchView(TViewType.START_SESSION)
           else
-            viewMgr.PromptMsg(FExh.ProcessCodError);
+            viewMgr.PromptMsg(ex.ProcessCodError);
         end
       );
+      ex.DisposeOf;
     end
   );
   th.FreeOnTerminate := True;

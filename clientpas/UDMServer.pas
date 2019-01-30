@@ -6,26 +6,29 @@ uses
   System.SysUtils, System.Classes, System.JSON,
   Data.Bind.Components, Data.Bind.ObjectScope,
   REST.Client, REST.Types, IPPeerClient, UUtilities,
-  FMX.Graphics, UHelper, UExceptionHandler,
+  FMX.Graphics, UHelper, UExceptionHandler, System.SyncObjs,
   // Models
   UModels;
 
 type
   TdmData = class(TDataModule)
     procedure DataModuleCreate(Sender: TObject);
+    procedure DataModuleDestroy(Sender: TObject);
   private
     var
       FUser: TUser;
 
-    function ExecRest(method: string; body: TJSONObject): TJSONObject;
+    procedure ExecRest(method: string; body: TJSONObject; out res: TJSONObject);
   public
     // method - Session
-    function LogIn(nickname, password: string): TExceptionHandler;
-    function SignIn(nickname, firstname, lastname, email, password: string;
-                    bm: TBitmap): TExceptionHandler;
+    procedure LogIn(nickname, password: string; var exce: TExceptionHandler);
+    procedure SignIn(nickname, firstname, lastname, email, password: string;
+                    bm: TBitmap; var exce: TExceptionHandler);
+
+    destructor Destroy; virtual;
 
     // getter
-    function GetUserPhoto(id: Integer): TExceptionHandler;
+    procedure GetUserPhoto(id: Integer; out stream: TBytesStream);
 
     // property
     property User: TUser read FUser write FUser;
@@ -47,7 +50,17 @@ begin
   FUser := TUser.Create;
 end;
 
-function TdmData.ExecRest(method: string; body: TJSONObject): TJSONObject;
+procedure TdmData.DataModuleDestroy(Sender: TObject);
+begin
+  FUser.DisposeOf;
+end;
+
+destructor TdmData.Destroy;
+begin
+  //
+end;
+
+procedure TdmData.ExecRest(method: string; body: TJSONObject; out res: TJSONObject);
 var
   client: TRESTClient;
   request: TRESTRequest;
@@ -55,7 +68,6 @@ var
   codError: Integer;
   obj: TJSONObject;
 begin
-  Result := TJSONObject.Create;
   client := TRESTClient.Create(Self);
   request := TRESTRequest.Create(Self);
   response := TRESTResponse.Create(Self);
@@ -72,72 +84,60 @@ begin
     if response.JSONValue.TryGetValue('codError', codError) = False then
       raise Exception.Create('Invalid server response');
 
-    obj := response.JSONValue.Clone as TJSONObject;
-    Result := obj;
+    obj := TJSONObject(response.JSONValue.Clone);
   except
     on e: Exception do
     begin
       obj := TJSONObject.Create;
       obj.AddPair('codError', '-999');
-      Result := obj;
     end;
   end;
+
+  res := obj;
+
+  Client.Free;
+  Request.Free;
+  Response.Free;
 end;
 
-function TdmData.GetUserPhoto(id: Integer): TExceptionHandler;
+procedure TdmData.GetUserPhoto(id: Integer; out stream: TBytesStream);
 var
   body: TJSONObject;
   res: TJSONObject;
   codError: Integer;
-  byte: TBytes;
-  b: TBytesStream;
 begin
-  Result := TExceptionHandler.Create;
-
   body := TJSONObject.Create;
   body.AddPair('id', IntToStr(User.Id));
   body.AddPair('token', User.Token);
   body.AddPair('id_usr', IntToStr(id));
-  res := ExecRest('getuserphoto', body);
+  ExecRest('getuserphoto', body, res);
   codError := StrToInt(res.GetValue('codError').Value);
-  Result.CodError := codError;
 
   try
     if codError <> 0 then
       raise Exception.Create('GetUserPhoto');
 
-    b := B64Decode(res.GetValue('image').Value);
-    User.Image.LoadFromStream(b);
-
-    Result.Response := True;
-  except
-    on e: Exception do
-    begin
-      Result.Response := False;
-    end;
+    B64Decode(res.GetValue('image').Value, stream);
+  finally
+    body.Free;
+    res.Free;
   end;
-
-  b.DisposeOf;
-  body.DisposeOf;
-  res.DisposeOf;
 end;
 
-function TdmData.LogIn(nickname, password: string): TExceptionHandler;
+procedure TdmData.LogIn(nickname, password: string; var exce: TExceptionHandler);
 var
   body: TJSONObject;
   res: TJSONObject;
   pass_hash: string;
   codError: Integer;
 begin
-  Result := TExceptionHandler.Create;
-
   body := TJSONObject.Create;
   body.AddPair('nickname', nickname);
   pass_hash := MakeHash512(password);
   body.AddPair('password', pass_hash);
-  res := ExecRest('login', body);
+  ExecRest('login', body, res);
   codError := StrToInt(res.GetValue('codError').Value);
-  Result.CodError := codError;
+  exce.CodError := codError;
   try
     if codError <> 0 then
       raise Exception.Create('LogIn');
@@ -147,22 +147,20 @@ begin
     User.Password := pass_hash;
     User.Token := res.GetValue('token').Value;
 
-    GetUserPhoto(User.Id);
-
-    Result.Response := True;
+    exce.Response := True;
   except
     on e: Exception do
     begin
-      Result.Response := False;
+      exce.Response := False;
     end;
   end;
 
-  body.DisposeOf;
-  res.DisposeOf;
+  body.Free;
+  res.Free;
 end;
 
-function TdmData.SignIn(nickname, firstname, lastname, email,
-  password: string; bm: TBitmap): TExceptionHandler;
+procedure TdmData.SignIn(nickname, firstname, lastname, email, password: string;
+                    bm: TBitmap; var exce: TExceptionHandler);
 var
   body: TJSONObject;
   res: TJSONObject;
@@ -171,8 +169,6 @@ var
   b: TBytesStream;
   bytes: TBytes;
 begin
-  Result := TExceptionHandler.Create;
-
   body := TJSONObject.Create;
   body.AddPair('nickname', nickname);
   body.AddPair('lastname', lastname);
@@ -183,25 +179,25 @@ begin
   b := TBytesStream.Create(bytes);
   bm.SaveToStream(b);
   body.AddPair('image', B64Encode(b));
-  res := ExecRest('signin', body);
+  ExecRest('signin', body, res);
   codError := StrToInt(res.GetValue('codError').Value);
-  Result.CodError := codError;
+  exce.CodError := codError;
 
   try
     if codError <> 0 then
       raise Exception.Create('SignIn');
 
-    Result.Response := True;
+    exce.Response := True;
   except
     on e: Exception do
     begin
-      Result.Response := False;
+      exce.Response := False;
     end;
   end;
 
-  b.DisposeOf;
-  body.DisposeOf;
-  res.DisposeOf;
+  b.Free;
+  body.Free;
+  res.Free;
 end;
 
 end.
