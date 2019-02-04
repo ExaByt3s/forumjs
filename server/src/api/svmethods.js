@@ -21,6 +21,7 @@ const methods = {};
     -9  : Article not have likes
     -10 : Articles empty
     -11 : User not have image
+    -12 : Not found notify
     -98 : Only for Developers
     -99 : Error query
     -999 : Connection error
@@ -234,7 +235,7 @@ Request:
         range: default(1)
         title:
         description:
-        image_p: base64
+        image: base64
     }
 Response:
     {
@@ -243,13 +244,13 @@ Response:
 */
 methods.push_article = async (req) => {
     let check = await checkRequestJson(req.body, 
-        ['ac_id','range','title','description','image_p']);
+        ['ac_id','range','title','description','image']);
     if (!check[0]) return check[1];
     try {
         let path_img = 'none'; 
-        if (image_p != '') {
-            path_img = path.join('storage/images/articles/' + uuid());
-            b64_decode(req.body.image_p, path_img);
+        if (req.body.image != '') {
+            path_img = 'storage/images/articles/' + uuid() + '.img';
+            srt.decode64(req.body.image, path_img);
         }
         let result = await db.PushArticle([
             req.body.ac_id,
@@ -258,6 +259,12 @@ methods.push_article = async (req) => {
             req.body.description,
             path_img
         ]);
+
+        if (result) {
+            let art_last_id = GetLastArticleByOwner(req.body.ac_id);
+            db.InternalPushGNotification([req.body.ac_id, art_last_id]);
+        }
+
         return result ? {
             codError: 0
         } : {
@@ -267,6 +274,7 @@ methods.push_article = async (req) => {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
+        console.log(err);
         return { codError: -999 };
     }
 }
@@ -275,45 +283,36 @@ methods.push_article = async (req) => {
 Request:
     {
         id:
-        offset:
-        token: 
+        token:
+        offset: 
     }
 Response:
     {
         codError:
+        length:
         data: [
             {
-                a_id:
-                ac_id:
-                range:
-                title:
-                description:
-                imagebase64:
-                create_at:
+                ar_id:
+                owner:
             }
         ]
     }
 */
 methods.get_articles = async (req) => {
-    let check = await checkRequestJson(req.body, ['id','offset']);
+    let check = await checkRequestJson(req.body, ['id','token','offset']);
     if (!check[0]) return check[1];
-    //check = await checkToken(req.body);
-    //if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
     try {
         let rows = await db.GetArticles(req.body.offset);
         let arr_data = [];
         for (let row of rows) {
             arr_data.push({
                 ar_id: row.ar_id,
-                ac_id: row.ac_id,
-                range: row.range,
-                title: row.title,
-                description: row.description,
-                imagebase64: srt.encode64(row.image_p),
-                create_at: row.create_at
+                owner: row.ac_id
             });
         }
-        return { codError: 0, data: arr_data };
+        return { codError: 0, length: arr_data.length, data: arr_data };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
@@ -326,51 +325,168 @@ methods.get_articles = async (req) => {
 Request:
     {
         id:
-        ar_id:
         token:
+        ar_id:
     }
 Response:
     {
         codError:
-        data: [ 
-            {
-                ar_id:
-                ac_id:
-                range:
-                title:
-                description:
-                imagebase64:
-                create_at:
-            }
-        ]
+        length:
+        data: {
+            ar_id:
+            ac_id:
+            range:
+            title:
+            description:
+            create_at:
+            image:
+        }
     }
 */
-methods.get_articles = async (req) => {
-    let check = await checkRequestJson(req.body, ['id','ar_id']);
+methods.get_article = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','token','ar_id']);
     if (!check[0]) return check[1];
     check = await checkToken(req.body);
     if (!check[0]) return check[1];
     try {
-        let rows = await db.GetArticleById(req.body.ar_id);
-        let arr_data = [];
-        for (let row of rows) {
-            arr_data.push({
-                ar_id: row.a_id,
-                ac_id: row.ac_id,
-                range: row.range,
-                title: row.title,
-                description: row.description,
-                imagebase64: srt.encode64(row.image_p),
-                create_at: row.create_at
-            });
-        }
+        let row = await db.GetArticleById(req.body.ar_id);
+        let article = {
+            //ar_id: row.ar_id,
+            ac_id: row.ac_id,
+            range: row.range,
+            title: row.title,
+            description: row.description,
+            create_at: row.create_at,
+            image: srt.encode64(row.image_p)
+        };
+        return { codError: 0, data: article };
     } catch (err) {
         if (err instanceof PersonalException) {
             return err.GetExceptionToJson();
         }
+        console.log(err);
         return { codError: -999 };
     }
 }
+
+/*
+Request:
+    {
+        id
+        token
+    }
+Response:
+    {
+        codError:
+        length:
+        data: [
+            {
+                nt_id:
+                type:
+                info_id:
+            }
+        ]
+    }
+*/
+methods.get_usernotifications = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','token']);
+    if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
+    try {
+        let rows = await db.GetUserNotifications(req.body.id);
+        let arr_nf = [];
+        for (let row of rows) {
+            arr_nf.push({
+                nt_id: row.unt_id,
+                type: row.type,
+                info_id: row.info_id 
+            });
+        }
+        return { codError: 0, length: arr_nf.length, data: arr_nf };
+    } catch(err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        console.log(err);
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        id
+        token
+        offset  // no implementado todavia
+    }
+Response:
+    {
+        codError:
+        length:
+        data: [
+            {
+                nt_id:
+                type:
+                info_id:
+            }
+        ]
+    }
+*/
+methods.get_globalnotifications = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','token','offset']);
+    if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
+    try {
+        let rows = await db.GetGlobalNotifications(req.body.offset);
+        let arr_nf = [];
+        for (let row of rows) {
+            arr_nf.push({
+                nt_id: row.gnt_id,
+                type: row.type,
+                info_id: row.info_id 
+            });
+        }
+        return { codError: 0, length: arr_nf.length, data: arr_nf };
+    } catch(err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        console.log(err);
+        return { codError: -999 };
+    }
+}
+
+/*
+Request:
+    {
+        id
+        token
+        nt_id
+    }
+Response:
+    {
+        codError:
+    }
+*/
+methods.confirm_unotification = async (req) => {
+    let check = await checkRequestJson(req.body, ['id','token','nt_id']);
+    if (!check[0]) return check[1];
+    check = await checkToken(req.body);
+    if (!check[0]) return check[1];
+    try {
+        await db.ConfirmUserNotification(req.body.id, req.body.nt_id);
+        return { codError: 0 };
+    } catch (err) {
+        if (err instanceof PersonalException) {
+            return err.GetExceptionToJson();
+        }
+        console.log(err);
+        return { codError: -999 };
+    }
+}
+
 
 /*
 Request:

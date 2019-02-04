@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899-12-30 00:00:00.000.274,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.017,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UVSession.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.831,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UHelper.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.024,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UExceptHandler.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.036,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UMUser.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.682,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.960,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UDMServer.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.525,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UCSession.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.920,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UCFrontend.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.712,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UMSServer.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.876,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas=C:\Users\WillDev\Desktop\ClientPasv2\UVFrontend.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.061,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.841,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.641,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.714,=C:\Users\WillDev\Desktop\ClientPasv2\UViewMgr.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.204,C:\Users\WillDev\Desktop\ClientPasv2\UDMServer.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.793,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.076,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.700,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.789,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.913,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.098,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.960,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.dfm=C:\Users\WillDev\Desktop\ClientPasv2\UDMServer.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.281,C:\Users\WillDev\Desktop\ClientPasv2\UVBoards.fmx=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.468,C:\Users\WillDev\Desktop\ClientPasv2\UVArticle.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.899,C:\Users\WillDev\Desktop\ClientPasv2\UVArticle.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.281,C:\Users\WillDev\Desktop\ClientPasv2\UVBoards.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.609,C:\Users\WillDev\Desktop\ClientPasv2\UCBoard.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.381,C:\Users\WillDev\Desktop\ClientPasv2\ForumDevV2.dproj=C:\Users\WillDev\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.021,C:\Users\WillDev\Desktop\ClientPasv2\UMArticle.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.582,=C:\Users\WillDev\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.177,C:\Users\WillDev\Desktop\ClientPasv2\UfrmMain.fmx=C:\Users\WillDev\Documents\Embarcadero\Studio\Projects\Unit1.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.288,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.163,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.719,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.712,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.177,C:\Users\WillDev\Desktop\ClientPasv2\UfrmMain.pas=C:\Users\WillDev\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.876,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.fmx=C:\Users\WillDev\Desktop\ClientPasv2\UVFrontend.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.017,C:\Users\WillDev\Desktop\ClientPasv2\Unit1.fmx=C:\Users\WillDev\Desktop\ClientPasv2\UVSession.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.572,C:\Users\WillDev\Desktop\ClientPasv2\UMSNotify.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.140,C:\Users\WillDev\Desktop\ClientPasv2\UMSCommon.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>2019-02-04 05:25:03.768,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>2019-02-04 05:25:14.550,C:\Users\WillDev\Desktop\ClientPasv2\UMNotification.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>2019-02-04 08:20:41.434,=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+    <Transaction>2019-02-04 08:20:56.517,C:\Users\WillDev\Desktop\ClientPasv2\USynchronizer.pas=C:\Users\WillDev\Desktop\ClientPasv2\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

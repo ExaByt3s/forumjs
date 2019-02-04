@@ -1,0 +1,420 @@
+object frmVBoards: TfrmVBoards
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 450
+  Quality = HighPerformance
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object lyBViews: TLayout
+    Align = Client
+    Size.Width = 450.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object tbViews: TTabControl
+      Align = Client
+      Size.Width = 450.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      TabIndex = 0
+      TabOrder = 0
+      TabPosition = None
+      Sizes = (
+        450s
+        480s
+        450s
+        480s
+        450s
+        480s)
+      object tbiDahsboard: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object vsbBoard: TVertScrollBox
+          Align = Client
+          Margins.Left = 5.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 5.000000000000000000
+          Margins.Bottom = 5.000000000000000000
+          Size.Width = 440.000000000000000000
+          Size.Height = 420.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Viewport.Width = 440.000000000000000000
+          Viewport.Height = 420.000000000000000000
+        end
+        object lyNotifyVSB: TLayout
+          Align = Top
+          Size.Width = 450.000000000000000000
+          Size.Height = 50.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object btnGotoAArticle: TButton
+            Tag = 7
+            Align = Right
+            Margins.Top = 12.000000000000000000
+            Margins.Right = 30.000000000000000000
+            Margins.Bottom = 12.000000000000000000
+            Position.X = 396.000000000000000000
+            Position.Y = 12.000000000000000000
+            Size.Width = 24.000000000000000000
+            Size.Height = 26.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'additembutton'
+            TabOrder = 0
+            Text = 'Button1'
+          end
+          object lyIntraNotify: TLayout
+            Align = Left
+            Size.Width = 369.000000000000000000
+            Size.Height = 50.000000000000000000
+            Size.PlatformDefault = False
+            Visible = False
+            TabOrder = 1
+            object rctPanelNVSB: TRectangle
+              Align = Center
+              Margins.Left = 30.000000000000000000
+              Size.Width = 300.000000000000000000
+              Size.Height = 30.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Kind = None
+              XRadius = 10.000000000000000000
+              YRadius = 10.000000000000000000
+              object lblpanelmessage: TLabel
+                Align = Center
+                StyledSettings = [Family, Style, FontColor]
+                Size.Width = 231.000000000000000000
+                Size.Height = 17.000000000000000000
+                Size.PlatformDefault = False
+                TextSettings.Font.Size = 14.000000000000000000
+                TextSettings.HorzAlign = Center
+                Text = 'Label1'
+                TabOrder = 0
+              end
+            end
+          end
+        end
+      end
+      object tbiAddArticle: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lyPanelAA: TLayout
+          Align = Client
+          Size.Width = 450.000000000000000000
+          Size.Height = 480.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object rctBack: TRectangle
+            Align = Center
+            Size.Width = 393.000000000000000000
+            Size.Height = 441.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+            XRadius = 10.000000000000000000
+            YRadius = 10.000000000000000000
+            object imgArticleA: TImage
+              MultiResBitmap = <
+                item
+                end>
+              Align = Top
+              Margins.Top = 10.000000000000000000
+              Position.Y = 10.000000000000000000
+              Size.Width = 393.000000000000000000
+              Size.Height = 271.000000000000000000
+              Size.PlatformDefault = False
+              OnMouseEnter = imgArticleAMouseEnter
+              OnMouseLeave = imgArticleAMouseLeave
+              object btnLoadPhoto: TButton
+                Align = Top
+                Margins.Left = 350.000000000000000000
+                Margins.Top = 20.000000000000000000
+                Margins.Right = 12.000000000000000000
+                Position.X = 350.000000000000000000
+                Position.Y = 20.000000000000000000
+                Size.Width = 31.000000000000000000
+                Size.Height = 25.000000000000000000
+                Size.PlatformDefault = False
+                StyleLookup = 'infotoolbutton'
+                TabOrder = 0
+                Text = 'Button1'
+                Visible = False
+                OnEnter = btnLoadPhotoEnter
+              end
+            end
+            object lblTitleA: TLabel
+              Tag = 5
+              Align = Top
+              StyledSettings = [Family, FontColor]
+              HitTest = True
+              Margins.Left = 10.000000000000000000
+              Margins.Right = 10.000000000000000000
+              Position.X = 10.000000000000000000
+              Position.Y = 281.000000000000000000
+              Size.Width = 373.000000000000000000
+              Size.Height = 19.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.Font.Size = 14.000000000000000000
+              TextSettings.HorzAlign = Center
+              Text = 'Title here.'
+              TabOrder = 1
+            end
+            object lblDescA: TLabel
+              Tag = 55
+              Align = Bottom
+              StyledSettings = [Family, Size, FontColor]
+              HitTest = True
+              Margins.Left = 10.000000000000000000
+              Margins.Right = 10.000000000000000000
+              Margins.Bottom = 10.000000000000000000
+              Position.X = 10.000000000000000000
+              Position.Y = 301.000000000000000000
+              Size.Width = 373.000000000000000000
+              Size.Height = 95.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.VertAlign = Leading
+              Text = 'Description here.'
+              TabOrder = 2
+            end
+            object Layout2: TLayout
+              Align = Bottom
+              Margins.Bottom = 10.000000000000000000
+              Position.Y = 406.000000000000000000
+              Size.Width = 393.000000000000000000
+              Size.Height = 25.000000000000000000
+              Size.PlatformDefault = False
+              TabOrder = 3
+              object btnGotoBoard: TButton
+                Tag = 77
+                Align = Left
+                Hint = 'Cancel'
+                Margins.Left = 30.000000000000000000
+                Position.X = 30.000000000000000000
+                Size.Width = 25.000000000000000000
+                Size.Height = 25.000000000000000000
+                Size.PlatformDefault = False
+                StyleLookup = 'replytoolbutton'
+                TabOrder = 1
+                Text = 'Button1'
+              end
+              object btnAddArticle: TButton
+                Align = Right
+                Hint = 'Confirm'
+                Margins.Right = 30.000000000000000000
+                Position.X = 338.000000000000000000
+                Size.Width = 25.000000000000000000
+                Size.Height = 25.000000000000000000
+                Size.PlatformDefault = False
+                StyleLookup = 'nexttoolbutton'
+                TabOrder = 0
+                Text = 'Button1'
+                OnClick = btnAddArticleClick
+              end
+            end
+          end
+          object lyDispatchEdit: TLayout
+            Align = Client
+            Size.Width = 450.000000000000000000
+            Size.Height = 480.000000000000000000
+            Size.PlatformDefault = False
+            Visible = False
+            TabOrder = 1
+            object rctBackgroundDE: TRectangle
+              Align = Client
+              Fill.Color = xA5282828
+              Size.Width = 450.000000000000000000
+              Size.Height = 480.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Kind = None
+              object rctPanelAArticle: TRectangle
+                Align = Center
+                Size.Width = 300.000000000000000000
+                Size.Height = 350.000000000000000000
+                Size.PlatformDefault = False
+                Stroke.Kind = None
+                XRadius = 10.000000000000000000
+                YRadius = 10.000000000000000000
+                object mmTextAA: TMemo
+                  Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+                  DataDetectorTypes = []
+                  TextSettings.WordWrap = True
+                  Align = Top
+                  Margins.Top = 10.000000000000000000
+                  Position.Y = 10.000000000000000000
+                  Size.Width = 300.000000000000000000
+                  Size.Height = 295.000000000000000000
+                  Size.PlatformDefault = False
+                  TabOrder = 0
+                  Viewport.Width = 300.000000000000000000
+                  Viewport.Height = 295.000000000000000000
+                end
+                object Layout1: TLayout
+                  Align = Bottom
+                  Margins.Bottom = 10.000000000000000000
+                  Position.Y = 315.000000000000000000
+                  Size.Width = 300.000000000000000000
+                  Size.Height = 25.000000000000000000
+                  Size.PlatformDefault = False
+                  TabOrder = 1
+                  object btnCancelOp: TButton
+                    Tag = 6
+                    Align = Left
+                    Hint = 'Cancel'
+                    Margins.Left = 30.000000000000000000
+                    Position.X = 30.000000000000000000
+                    Size.Width = 25.000000000000000000
+                    Size.Height = 25.000000000000000000
+                    Size.PlatformDefault = False
+                    StyleLookup = 'replytoolbutton'
+                    TabOrder = 1
+                    Text = 'Button1'
+                  end
+                  object btnConfirmOp: TButton
+                    Tag = 66
+                    Align = Right
+                    Hint = 'Confirm'
+                    Margins.Right = 30.000000000000000000
+                    Position.X = 245.000000000000000000
+                    Size.Width = 25.000000000000000000
+                    Size.Height = 25.000000000000000000
+                    Size.PlatformDefault = False
+                    StyleLookup = 'nexttoolbutton'
+                    TabOrder = 0
+                    Text = 'Button1'
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+      object tbiTemplates1: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object lyArticleTemplate: TLayout
+          Margins.Right = 20.000000000000000000
+          Position.X = 27.000000000000000000
+          Position.Y = 40.000000000000000000
+          Size.Width = 376.000000000000000000
+          Size.Height = 400.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object rctPanelArticle: TRectangle
+            Tag = 99
+            Align = Client
+            Size.Width = 376.000000000000000000
+            Size.Height = 400.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+            XRadius = 10.000000000000000000
+            YRadius = 10.000000000000000000
+            object imgArticle: TImage
+              Tag = 100
+              MultiResBitmap = <
+                item
+                end>
+              Align = Top
+              Margins.Top = 10.000000000000000000
+              Position.Y = 10.000000000000000000
+              Size.Width = 376.000000000000000000
+              Size.Height = 260.000000000000000000
+              Size.PlatformDefault = False
+            end
+            object lblTitleArticle: TLabel
+              Tag = 101
+              Align = Top
+              StyledSettings = [Family, FontColor]
+              Margins.Left = 10.000000000000000000
+              Margins.Right = 10.000000000000000000
+              Position.X = 10.000000000000000000
+              Position.Y = 270.000000000000000000
+              Size.Width = 356.000000000000000000
+              Size.Height = 35.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.Font.Size = 14.000000000000000000
+              TextSettings.Font.StyleExt = {00060000000000000004000000}
+              TextSettings.HorzAlign = Center
+              Text = 'Label1'
+              TabOrder = 1
+            end
+            object lblDescArticle: TLabel
+              Tag = 102
+              Align = Bottom
+              Margins.Left = 10.000000000000000000
+              Margins.Right = 10.000000000000000000
+              Margins.Bottom = 10.000000000000000000
+              Position.X = 10.000000000000000000
+              Position.Y = 306.000000000000000000
+              Size.Width = 356.000000000000000000
+              Size.Height = 84.000000000000000000
+              Size.PlatformDefault = False
+              TextSettings.VertAlign = Leading
+              Text = 'Label1'
+              TabOrder = 2
+            end
+          end
+        end
+      end
+    end
+    object lyLoading: TLayout
+      Align = Client
+      Size.Width = 450.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+      TabOrder = 1
+      object rctBackgroundL: TRectangle
+        Align = Client
+        Fill.Color = xA5282828
+        Size.Width = 450.000000000000000000
+        Size.Height = 480.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object AniIndicator1: TAniIndicator
+          Align = Center
+          Size.Width = 80.000000000000000000
+          Size.Height = 80.000000000000000000
+          Size.PlatformDefault = False
+        end
+      end
+    end
+  end
+  object odloadphoto: TOpenDialog
+    Left = 400
+    Top = 8
+  end
+end

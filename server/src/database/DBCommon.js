@@ -41,7 +41,7 @@ class DBCommon
             if (!rows.length)
                 throw new PersonalException(``, '', '');
             let pass_encrypt = srt.mkHashSHA512(args[1]);
-            query = "SELECT `ac_id` FROM `login` WHERE `password` = '" + pass_encrypt + "';";
+            query = "SELECT `ac_id` FROM `login` WHERE `password` = '" + pass_encrypt + "' AND `ac_id` = " + rows[0].acc_id + ";";
             rows = await this.ExecQry(query);
             if (!rows.length)
                 throw new PersonalException(``, '', '');
@@ -72,11 +72,7 @@ class DBCommon
             }
 
             let query = "INSERT INTO `accounts`(`range`,`nickname`,`lastname`,`firstname`,`email`) " + 
-                    "VALUES(" + 1 + ",'" +
-                                args[0] + "','" +
-                                args[1] + "','" + 
-                                args[2] + "','" +
-                                args[3] + "');";
+                        `VALUES(${1}, '${args[0]}','${args[1]}','${args[2]}','${args[3]}');`;
         
             await this.ExecQry(query);
 
@@ -85,16 +81,13 @@ class DBCommon
             let token = srt.GenerateToken(id);
             let pass_encrypt = srt.mkHashSHA512(args[4]);
             query = "INSERT INTO `login`(`ac_id`,`password`,`token`,`lastlog`) " +
-                    "VALUES(" + id + ",'" +
-                                pass_encrypt + "','" +
-                                token + "','" +
-                                util.DateToMysqlFormat() + "');";
+                    `VALUES(${id},'${pass_encrypt}','${token}','${util.DateToMysqlFormat()}');`;
         
             await this.ExecQry(query);
 
             // Add profile photo.
             query = "INSERT INTO `profiles`(`ac_id`,`image_p`) " +
-                    "VALUES(" + id + ", '" + args[5] + "');";
+                    `VALUES(${id},'${args[5]}');`;
             await this.ExecQry(query);
 
             return true;
@@ -117,12 +110,8 @@ class DBCommon
             [4] = image_p
          */
         try {
-            let query = "INSERT INTO `articles`(`ac_id`,`range`,title`,`description`,`image_p`) " + 
-                    "VALUES(" + args[0] + "," +
-                                args[1] + ",'" +
-                                args[2] + "','" + 
-                                args[3] + "','" +
-                                args[4] + "');";
+            let query = "INSERT INTO `articles`(`ac_id`,`range`,`title`,`description`,`image_p`) " +
+                    `VALUES(${args[0]},${args[1]},'${args[2]}','${args[3]}','${args[4]}');`;
             
             await this.ExecQry(query);
             return true;
@@ -130,6 +119,62 @@ class DBCommon
             if (!(err instanceof PersonalException)) {
                 console.error(err);
                 return false;
+            }
+            throw err;
+        }
+    }
+
+    // Global Notifications
+    async InternalPushGNotification(args) {
+        /* Args
+            [0] = ac_id
+            [1] = type          0 = new article
+            [2] = info_id
+        */
+        try {
+            let query = "INSERT INTO `gnotify`(`ac_id`,`type`,`info_id`) " +
+                    `VALUES(${args[0]},${args[1]},${args[2]})`;
+            await this.ExecQry(query);
+            return true;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                console.error(err);
+                return false;
+            }
+            return err;
+        }
+    }
+
+    // User Notifications
+    async InternalPushUNotification(args) {
+        /* Args
+            [0] = account id
+            [1] = type          0 = new article | 1 = private message
+            [2] = info_id
+        */
+        try {
+            let query = "INSERT INTO `unotify`(`ac_id`,`type`,`info_id`) " +
+                    `VALUES(${args[0]},${args[1]},${args[2]});`;
+            await this.ExecQry(query);
+            return true;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                console.error(err);
+                return false;
+            }
+            throw err;
+        }
+    }
+
+    async ConfirmUserNotification(id, nt_id) {
+        try {
+            if (!id || !nt_id) throw "known't";
+            let query = "DELETE FROM `unotify` WHERE `unt_id`="+nt_id+" AND `ac_id`="+id+";";
+            let result = await this.ExecQry(query);
+            console.log(result);
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "known't";
             }
             throw err;
         }
@@ -153,7 +198,7 @@ class DBCommon
     async GetUserById(id) {
         try {
             if (!id) throw "know't";
-            let rows = await this.ExecQry("SELECT * FROM `accounts` WHERE `acc_id` = " + id + ";");
+            let rows = await this.ExecQry("SELECT * FROM `accounts` WHERE `acc_id`="+id+";");
             if (!rows.length)
                 throw new PersonalException(`Not found this id: ${id}.`, 'GetUserById', '-2');
             return rows[0]; 
@@ -168,7 +213,7 @@ class DBCommon
     async GetTokenUser(id) {
         try {
             if (!id) throw "know't";
-            let rows = await this.ExecQry("SELECT `token` FROM `login` WHERE `ac_id` = " + id + ";");
+            let rows = await this.ExecQry("SELECT `token` FROM `login` WHERE `ac_id`="+id+";");
             if (!rows.length)
                 throw new PersonalException(`Not found token in this id: ${id}.`, 'GetTokenUser', '-1');
             return rows[0].token;
@@ -183,7 +228,7 @@ class DBCommon
     async GetUserIdByEmail(email, for_checked) {
         try {
             if (!email) throw "know't";
-            let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `email` = '" + email + "';");
+            let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `email` ='"+email+"';");
             if (!rows.length) {
                 if (!for_checked)
                     throw new PersonalException(`Not found id in this email: ${email}.`, 'GetUserIdByEmail', '-2');
@@ -202,8 +247,8 @@ class DBCommon
 
     async GetUserIdByNickname(nickname, for_checked) {
         try {
-            if (!nickname) throw "know't";
-            let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `nickname` = '" + nickname + "';");
+            if (!nickname) throw "know't"
+            let rows = await this.ExecQry("SELECT `acc_id` FROM `accounts` WHERE `nickname` ='"+nickname+"';");
             if (!rows.length) {
                 if (!for_checked)
                     throw new PersonalException(`Not found id in this nickname: ${nickname}.`, 'GetUserIdByNickname', '-2');
@@ -223,7 +268,7 @@ class DBCommon
     async GetUserImage(id) {
         try {
             if (!id) throw "know't No hay id";
-            let rows = await this.ExecQry("SELECT `image_p` FROM `profiles` WHERE `ac_id` = " + id + ";");
+            let rows = await this.ExecQry("SELECT `image_p` FROM `profiles` WHERE `ac_id`="+id+";");
             if (!rows.length) {
                 throw new PersonalException(`Not found image`, 'GetUserImage', -11);
             } else {
@@ -241,9 +286,10 @@ class DBCommon
     // Gets for Articles
     async GetArticles(offset) {
         try {
-            if (!offset) throw "know't";
-            let rows = await this.ExecQry("SELECT * FROM `article` WHERE `ar_id` < " + offset + 
-                                          " ORDER BY `li_id` DESC;");
+            //if (!offset) throw "know't";
+           // let rows = await this.ExecQry("SELECT * FROM `article` WHERE `ar_id` < " + offset + 
+           //                                 " ORDER BY `li_id` DESC;");
+            let rows = await this.ExecQry("SELECT `ar_id`, `ac_id` FROM `articles`;");
             if (!rows.length)
                 throw new PersonalException(`Empty articles.`, 'GetArticles', '-10');
             return rows;
@@ -258,12 +304,13 @@ class DBCommon
     async GetArticleById(id_article) {
         try {
             if (!id_article) throw "know't";
-            let rows = await this.ExecQry("SELECT * FROM `article` WHERE `ar_id` = " + id_article + ";");
+            let rows = await this.ExecQry("SELECT * FROM `articles` WHERE `ar_id` ="+id_article+";");
             if (!rows.length)
-                throw new PersonalException(`Not found article id: ${id}.`, 'GetArticle', '-8');
+                throw new PersonalException(`Not found article id: ${id_article}.`, 'GetArticle', '-8');
             return rows[0];
         } catch (err) {
             if (!(err instanceof PersonalException)) {
+                console.log(err);
                 throw "know't";
             }
             throw err;
@@ -273,10 +320,57 @@ class DBCommon
     async GetArticleLikes(id_article) {
         try {
             if (!id_article) throw "know't";
-            let rows = await this.ExecQry("SELECT * FROM `likes` WHERE `ar_id` = " + id_article + ";");
+            let rows = await this.ExecQry("SELECT * FROM `likes` WHERE `ar_id`="+id_article+";");
             if (!rows.length)
-                throw new PersonalException(`Not found article id: ${id}.`, 'GetArticle', '-9');
+                throw new PersonalException(`Not found article id: ${id_article}.`, 'GetArticle', '-9');
             return rows.length;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetLastArticleByOwner(id_usr) {
+        try {
+            if (!id_usr) throw "known't";
+            let rows = await this.ExecQry("SELECT `gnt_id` FROM `gnotify` WHERE `ac_id`="+id_usr+
+                                          " ORDER BY `gnt_id` DESC LIMIT 1;");
+            if (!rows.length)
+                throw new PersonalException(`Empty articles.`, 'GetArticles', '-10');
+            return rows[0];
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "known't";
+            }
+            throw err;
+        }
+    }
+
+    // Get for Notifications
+    async GetUserNotifications(id_user, offset) {
+        try {
+            if (!id_user) throw "know't";
+            let rows = await this.ExecQry("SELECT * FROM `unotify` WHERE `ac_id`="+id_user+";");
+            if (!rows.length)
+                throw new PersonalException(`Not found unotify id: ${id_user}.`, 'GetNotifications', '-12');
+            return rows;
+        } catch (err) {
+            if (!(err instanceof PersonalException)) {
+                throw "know't";
+            }
+            throw err;
+        }
+    }
+
+    async GetGlobalNotifications(offset) {
+        try {
+            if (!id_user || !offset) throw "know't";
+            let rows = await this.ExecQry("SELECT * FROM `gnotify` WHERE `gnt_id` > "+offset+";");
+            if (!rows.length)
+                throw new PersonalException(`Not found unotify id: ${id_user}.`, 'GetNotifications', '-12');
+            return rows;
         } catch (err) {
             if (!(err instanceof PersonalException)) {
                 throw "know't";
@@ -290,8 +384,8 @@ class DBCommon
         try {
             if (!id) throw "know't";
             let new_token = srt.GenerateToken(id);
-            let rows = await this.ExecQry("UPDATE `login` SET `token` = '" + new_token + 
-                                          "' WHERE `ac_id` = " + id + ";");
+            let rows = await this.ExecQry("UPDATE `login` SET `token`='"+ new_token+ 
+                                          "' WHERE `ac_id`="+id+";");
             if (!rows.affectedRows)
                 throw new PersonalException(`Data in the not found.`,'UpdateUserToken','-2')
             return new_token;
@@ -304,7 +398,7 @@ class DBCommon
         }
     }
 
-    // in dev
+    // on dev
     async ClearTables() {
         try {
             await this.ExecQry("DELETE FROM `accounts`;");

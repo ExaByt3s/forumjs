@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const svm = require('../controllers/svmethods');
+const svm = require('../api/svmethods');
 
 const svm_router = new Router();
 
@@ -41,7 +41,13 @@ svm_router.post('/getarticles', async (req, res) => {
 });
 
 svm_router.post('/getarticle', async (req, res) => {
-    res.json(await svm.get_articles(req));
+    res.json(await svm.get_article(req));
+});
+
+// notify
+// getters notify
+svm_router.post('/getgnotifications', async (req, res) => {
+    res.json(await svm.get_globalnotifications(req));
 });
 
 // in dev

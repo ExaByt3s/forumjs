@@ -1,21 +1,26 @@
 object frmMain: TfrmMain
-  Left = 0
-  Top = 0
-  Caption = 'Form1'
+  Left = 300
+  Top = 100
+  BorderIcons = [biSystemMenu]
+  Caption = 'ForumDevV2 SRC'
   ClientHeight = 480
   ClientWidth = 640
+  Position = Designed
+  Quality = HighPerformance
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  OnClose = FormClose
+  OnDestroy = FormDestroy
+  Left = 300
+  Top = 100
   DesignerMasterStyle = 0
-  object lyMainView: TLayout
+  object lyMainPortView: TLayout
     Align = Client
     Size.Width = 640.000000000000000000
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 0
+    TabOrder = 1
   end
   object lyPrompt: TLayout
     Align = Client
@@ -23,10 +28,10 @@ object frmMain: TfrmMain
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
     Visible = False
-    TabOrder = 1
+    TabOrder = 2
     object rctBackground: TRectangle
       Align = Client
-      Fill.Color = x96000000
+      Fill.Color = xA5282828
       Size.Width = 640.000000000000000000
       Size.Height = 480.000000000000000000
       Size.PlatformDefault = False
@@ -34,36 +39,36 @@ object frmMain: TfrmMain
       object rctPanel: TRectangle
         Align = Center
         Size.Width = 350.000000000000000000
-        Size.Height = 200.000000000000000000
+        Size.Height = 115.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
-        object lblpromptmsg: TLabel
+        XRadius = 10.000000000000000000
+        YRadius = 10.000000000000000000
+        object lblPromptMessage: TLabel
           Align = Top
-          Margins.Left = 15.000000000000000000
-          Margins.Top = 15.000000000000000000
-          Margins.Right = 15.000000000000000000
-          Position.X = 15.000000000000000000
-          Position.Y = 15.000000000000000000
-          Size.Width = 320.000000000000000000
-          Size.Height = 106.000000000000000000
+          Margins.Left = 50.000000000000000000
+          Margins.Right = 50.000000000000000000
+          Position.X = 50.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 73.000000000000000000
           Size.PlatformDefault = False
-          TextSettings.VertAlign = Leading
+          TextSettings.HorzAlign = Center
           Text = 'Label1'
           TabOrder = 0
         end
-        object btnokprompt: TButton
+        object btnPromptOK: TButton
           Align = Top
-          Margins.Left = 50.000000000000000000
-          Margins.Top = 20.000000000000000000
-          Margins.Right = 50.000000000000000000
-          Position.X = 50.000000000000000000
-          Position.Y = 141.000000000000000000
-          Size.Width = 250.000000000000000000
-          Size.Height = 30.000000000000000000
+          Margins.Left = 100.000000000000000000
+          Margins.Top = 5.000000000000000000
+          Margins.Right = 100.000000000000000000
+          Position.X = 100.000000000000000000
+          Position.Y = 78.000000000000000000
+          Size.Width = 150.000000000000000000
+          Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
-          Text = 'Accept'
-          OnClick = btnokpromptClick
+          Text = 'OK'
+          OnClick = btnPromptOKClick
         end
       end
     end

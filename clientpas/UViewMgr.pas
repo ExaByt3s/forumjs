@@ -7,29 +7,33 @@ uses
 
 type
   // Type view
-  TViewType = (START_SESSION=0, LOGOUT_SESSION=1);
+  TViewType = (vtStartSession=0, vtLogout=1);
 
   // Closure
-  CLOSUREPrompt = procedure(const msg: string) of object;
-  CLOSURELaunchView = procedure(viewtype: TViewType) of object;
+  CLOSUREPrompt = procedure(const AMessage: string) of object;
+  CLOSURELoading = procedure(AActive: Boolean) of object;
+  CLOSURELaunchView = procedure(AViewType: TViewType) of object;
 
   TViewMgr = class(TObject)
     private
-      var
-        CB_FPrompt: CLOSUREPrompt;
-        CB_FLaunchView: CLOSURELaunchView;
+      FLaunchV: CLOSURELaunchView;
+      FPrompt: CLOSUREPrompt;
+      FLoading: CLOSURELoading;
     public
       constructor Create;
+      destructor Destroy; virtual;
+
+      class procedure GetView(AForm: TComponentClass; AParent: TLayout;
+                   ANewRef: TForm; ALastRef: TForm; const AComponent: string); static;
 
       // closure
-      property PromptMsg: CLOSUREPrompt read CB_FPrompt write CB_FPrompt;
-      property LaunchView: CLOSURELaunchView read CB_FLaunchView write CB_FLaunchView;
+      property LaunchView: CLOSURELaunchView read FLaunchV write FLaunchV;
+      property PromptMessage: CLOSUREPrompt read FPrompt write FPrompt;
+      property Loading: CLOSURELoading read FLoading write FLoading;
   end;
 
-procedure GetViews(pForm: TComponentClass; parent: TLayout; ref: TForm; const comp_name: string);
-
 var
-  viewMgr: TViewMgr;
+  gViewMgr: TViewMgr;
 
 implementation
 
@@ -37,24 +41,41 @@ implementation
 
 constructor TViewMgr.Create;
 begin
-  CB_FPrompt := nil;
+  PromptMessage := nil;
+  inherited;
 end;
 
-procedure GetViews(pForm: TComponentClass; parent: TLayout; ref: TForm; const comp_name: string);
-var
-  i: Integer;
+destructor TViewMgr.Destroy;
 begin
-  if (ref = nil) or (Assigned(ref)) and
-      (ref.ClassName <> pForm.ClassName) then
-  begin
-    for i := parent.ControlsCount - 1 downto 0 do
-      parent.RemoveObject(parent.Controls[i]);
+  LaunchView := nil;
+  PromptMessage := nil;
+  Loading := nil;
 
-    ref.DisposeOf;
-    ref := nil;
-    Application.CreateForm(pForm, ref);
-    parent.AddObject(TLayout(ref.FindComponent(comp_name)));
+  inherited;
+end;
+
+class procedure TViewMgr.GetView(AForm: TComponentClass; AParent: TLayout;
+                   ANewRef: TForm; ALastRef: TForm; const AComponent: string);
+var
+  I: Integer;
+begin
+  for I := AParent.ControlsCount - 1 downto 0 do
+      AParent.RemoveObject(AParent.Controls[i]);
+
+  if Assigned(ALastRef) then
+  begin
+    ALastRef.DisposeOf;
+    ALastRef := nil;
   end;
+
+  if Assigned(ANewRef) then
+  begin
+    ANewRef.Destroy;
+    ANewRef := nil;
+  end;
+
+  Application.CreateForm(AForm, ANewRef);
+  AParent.AddObject(TLayout(ANewRef.FindComponent(AComponent)));
 end;
 
 end.

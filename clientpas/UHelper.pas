@@ -3,28 +3,69 @@ unit UHelper;
 interface
 
 uses
-  System.JSON, System.Classes, System.StrUtils, IdCoderMIME;
+  System.Classes, System.SysUtils, System.JSON, System.Hash, IdCoderMIME;
 
-procedure GetJArrayRow(org: TJSONValue; val: string; out res: TJSONObject);
-function B64Encode(bs: TBytesStream): string;
-procedure B64Decode(src: string; var stream: TBytesStream);
+type
+  TPair<TFirst, TSecond> = record
+    First: TFirst;
+    Second: TSecond;
+  end;
+
+// Base64 Enc/Dec
+function B64Encode(AStream: TBytesStream): string;
+procedure B64Decode(const ASource: string; out AStream: TBytesStream);
+
+// Hash512
+function HASH512(const AText: string): string;
+
+// Facilitar la forma en que se sync una variable global altamente concurrida.
+procedure BeginRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
+procedure EndRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
+procedure BeginWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
+procedure EndWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
 
 implementation
 
-  procedure GetJArrayRow(org: TJSONValue; val: string; out res: TJSONObject);
-  begin
-    res := org.GetValue<TJSONObject>(val);
-  end;
+function B64Encode(AStream: TBytesStream): string;
+begin
+  AStream.Position := 0;
+  Result := TidEncoderMIME.EncodeStream(AStream);
+end;
 
-  function B64Encode(bs: TBytesStream): string;
-  begin
-    bs.Position := 0;
-    Result := TIdEncoderMIME.EncodeStream(bs);
-  end;
+procedure B64Decode(const ASource: string; out AStream: TBytesStream);
+begin
+  AStream := TBytesStream.Create;
+  TIdDecoderMIME.DecodeStream(ASource, AStream);
+  AStream.Position := 0;
+end;
 
-  procedure B64Decode(src: string; var stream: TBytesStream);
-  begin
-    TIdDecoderMIME.DecodeStream(src, stream);
-    stream.Position := 0;
-  end;
+function HASH512(const AText: string): string;
+var
+  hash: string;
+begin
+  hash := THashSHA2.GetHashString(LowerCase(AText),
+    THashSHA2.TSHA2Version.SHA512);
+  Result := LowerCase(hash);
+end;
+
+procedure BeginRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
+begin
+  ALock.BeginRead;
+end;
+
+procedure EndRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
+begin
+  ALock.EndRead;
+end;
+
+procedure BeginWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
+begin
+  ALock.BeginWrite;
+end;
+
+procedure EndWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
+begin
+  ALock.EndRead;
+end;
+
 end.

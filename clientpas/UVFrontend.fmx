@@ -1,0 +1,101 @@
+object frmVFrontend: TfrmVFrontend
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 480
+  ClientWidth = 640
+  Position = Designed
+  Quality = HighPerformance
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object lyVFrontend: TLayout
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 480.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object rctDashboard: TRectangle
+      Align = Left
+      Size.Width = 185.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object crlPhoto: TCircle
+        Align = Top
+        Fill.Bitmap.WrapMode = TileStretch
+        Fill.Kind = Bitmap
+        Margins.Left = 30.000000000000000000
+        Margins.Top = 20.000000000000000000
+        Margins.Right = 30.000000000000000000
+        Position.X = 30.000000000000000000
+        Position.Y = 20.000000000000000000
+        Size.Width = 125.000000000000000000
+        Size.Height = 125.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF9B9B9B
+        OnMouseEnter = crlPhotoMouseEnter
+        OnMouseLeave = crlPhotoMouseLeave
+        object btnloadphoto: TButton
+          Align = Center
+          CanFocus = False
+          DisableFocusEffect = True
+          Size.Width = 30.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'infotoolbutton'
+          TabOrder = 0
+          Text = 'Button1'
+          Visible = False
+          OnClick = btnloadphotoClick
+        end
+      end
+      object lblnickname: TLabel
+        Align = Top
+        StyledSettings = [Family, FontColor]
+        Margins.Left = 20.000000000000000000
+        Margins.Top = 20.000000000000000000
+        Margins.Right = 20.000000000000000000
+        Position.X = 20.000000000000000000
+        Position.Y = 165.000000000000000000
+        Size.Width = 145.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Size = 16.000000000000000000
+        TextSettings.Font.StyleExt = {00060000000000000004000000}
+        TextSettings.HorzAlign = Center
+        Text = 'Label1'
+        TabOrder = 1
+      end
+      object btnlogout: TButton
+        Align = Bottom
+        Margins.Left = 60.000000000000000000
+        Margins.Right = 60.000000000000000000
+        Margins.Bottom = 20.000000000000000000
+        Position.X = 60.000000000000000000
+        Position.Y = 438.000000000000000000
+        Size.Width = 65.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'backtoolbutton'
+        TabOrder = 2
+        Text = 'Logout'
+        OnClick = btnlogoutClick
+      end
+    end
+    object lyBoardView: TLayout
+      Align = Client
+      Size.Width = 455.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
+  end
+  object odloadphoto: TOpenDialog
+    Left = 152
+    Top = 8
+  end
+end

@@ -4,6 +4,8 @@
 *.exe
 *.dfm.*
 *.cpp.*
+*.pas.*
+*.fmx.*
 *.h.*
 
 server/storage
@@ -11,15 +13,3 @@ server/storage
 clientpas/__history
 clientpas/__recovery
 clientpas/Win32
-
-clientcpp/__history
-clientcpp/__recovery
-clientcpp/Win32
-clientcpp/Controllers/_history
-clientcpp/Controllers/_reconver
-clientcpp/Models/__history
-clientcpp/Models/__recovery
-clientcpp/Views/__history
-clientcpp/Views/__recovery
-clientcpp/Services/__history
-clientcpp/Services/__recovery

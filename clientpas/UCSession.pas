@@ -3,28 +3,43 @@ unit UCSession;
 interface
 
 uses
-  System.Classes, FMX.Graphics, UExceptionHandler,
+  System.Classes, System.SysUtils, System.Threading, UExceptHandler,
+  // Manager
   UViewMgr,
-  //microservice
-  UDMServer;
+  // Helper
+  UHelper,
+  USynchronizer,
+  // Microservice
+  UMSServer,
+  // Views
+  UVFrontend;
 
 type
+  CLOSUREClearController = procedure(AInReturn: Boolean) of object;
+  CLOSURETransitionTab = procedure(Sender: TObject) of object;
+
   TCSession = class(TObject)
     private
-      var
+      FClearController: CLOSUREClearController;
+      FChangeTab: CLOSURETransitionTab;
+
     public
       constructor Create;
       destructor Destroy; virtual;
 
-      // start session async
-      procedure StartSession(const nickname, password: string;
-                              var exc: TExceptionHandler);
-      procedure RegisterUser(const nickname, lastname, firstname, email, pass: string;
-                            bmp: TBitmap; var exc: TExceptionHandler);
+      procedure LogIn(ANickname, APassword: string);
+      procedure SignIn(ANickname, ALastName, AFirstName, AEmail, APassword: string;
+                       AStream: TBytesStream);
+
+      property ClearController: CLOSUREClearController read FClearController write FClearController;
+      property ChangeFrontTab: CLOSURETransitionTab read FChangeTab write FChangeTab;
   end;
 
+const
+  SLEEP_PER_PROCCESS = 2000; // Real value = 500
+
 var
-  cSession: TCSession;
+  CSession: TCSession;
 
 implementation
 
@@ -32,22 +47,97 @@ implementation
 
 constructor TCSession.Create;
 begin
+  FClearController := nil;
+  FChangeTab := nil;
+  inherited;
 end;
 
 destructor TCSession.Destroy;
 begin
+  inherited;
 end;
 
-procedure TCSession.RegisterUser(const nickname, lastname, firstname, email, pass: string;
-                            bmp: TBitmap; var exc: TExceptionHandler);
+procedure TCSession.LogIn(ANickname, APassword: string);
+var
+  th: TThread;
 begin
-  dmData.SignIn(nickname, lastname, firstname, email, pass, bmp, exc);
+  th := TThread.CreateAnonymousThread(
+  procedure
+  var
+    exp: TExceptHandler;
+    pass_hash: string;
+  begin
+    BeginRead(TMREWS_MSServer);
+    pass_hash := HASH512(APassword);
+    MSServer.LogInUser(LowerCase(ANickname), pass_hash, exp);
+    EndRead(TMREWS_MSServer);
+
+    TThread.Sleep(SLEEP_PER_PROCCESS); // Real sleep 500
+
+    TThread.Synchronize(nil,
+    procedure
+    begin
+      gViewMgr.Loading(False);
+      if exp.CodError <> 0 then
+      begin
+        gViewMgr.PromptMessage(exp.Message);
+        ClearController(True);
+      end
+      else
+      begin
+        gViewMgr.LaunchView(TViewType.vtStartSession);
+      end;
+    end);
+    exp.Free;
+  end);
+
+  th.FreeOnTerminate := True;
+  gViewMgr.Loading(True);
+  th.Start;
 end;
 
-procedure TCSession.StartSession(const nickname, password: string;
-                              var exc: TExceptionHandler);
+procedure TCSession.SignIn(ANickname, ALastName, AFirstName, AEmail, APassword: string;
+                           AStream: TBytesStream);
+var
+  th: TThread;
 begin
-  dmData.LogIn(nickname, password, exc);
+  th := TThread.CreateAnonymousThread(
+  procedure
+  var
+    exp: TExceptHandler;
+    pass_hash: string;
+  begin
+    BeginRead(TMREWS_MSServer);
+    pass_hash := HASH512(APassword);
+    MSServer.SignInUser(LowerCase(ANickname), LowerCase(ALastName),
+                        LowerCase(AFirstName), LowerCase(AEmail), LowerCase(pass_hash),
+                        B64Encode(AStream), exp);
+    EndRead(TMREWS_MSServer);
+
+    TThread.Sleep(SLEEP_PER_PROCCESS); // Real sleep 500
+
+    TThread.Synchronize(nil,
+    procedure
+    begin
+      gViewMgr.Loading(False);
+      if exp.CodError <> 0 then
+      begin
+        gViewMgr.PromptMessage(exp.Message);
+        ClearController(True);
+      end
+      else
+      begin
+        ChangeFrontTab(nil);
+      end;
+    end);
+
+    AStream.Free;
+    exp.Free;
+  end);
+
+  th.FreeOnTerminate := True;
+  gViewMgr.Loading(True);
+  th.Start;
 end;
 
 end.

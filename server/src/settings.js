@@ -14,7 +14,8 @@ class Server {
 
         // Middleware
         this.app.use(morgan("dev"));
-        this.app.use(bodyparse.urlencoded({ extended: false }));
+        this.app.use(bodyparse.json({ limit: '10mb', extended: true }));
+        this.app.use(bodyparse.urlencoded({ limit: '10mb', extended: true }));
         this.app.use(bodyparse.json());
 
 
