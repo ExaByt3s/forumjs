@@ -35,6 +35,8 @@ type
       property StreamImg: TBytesStream read FStreamImg write CopyImage;
   end;
 
+procedure ResetUserSession(ACurrentUser: TMUser);
+
 var
   gMUser: TMUser;
   // Synchronizer shared memory SAFE.
@@ -71,12 +73,17 @@ begin
   inherited;
 end;
 
+procedure ResetUserSession(ACurrentUser: TMUser);
+begin
+  ACurrentUser.Destroy;
+  ACurrentUser := TMUser.Create(True);
+end;
+
 procedure TMUser.CopyImage(AStream: TBytesStream);
 begin
   if not Assigned(FStreamImg) then
   begin
     FStreamImg := TBytesStream.Create;
-    FStreamImg.Clear;
     FStreamImg.CopyFrom(AStream, AStream.Size);
   end
   else

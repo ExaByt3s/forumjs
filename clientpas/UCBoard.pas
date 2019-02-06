@@ -12,8 +12,7 @@ uses
   UMArticle,
   UMNotification,
   // Microservice
-  UMSServer,
-  UMSNotify,
+  UServerMethods,
   // manager
   UViewMgr;
 
@@ -43,8 +42,7 @@ type
       { Obtener articulos e insertarlos al VSB }
       procedure GetArticles;
       // this method every call on a thread.
-      procedure GetArticle(AArticleId: Integer; AArticle: TMArticle;
-                           AExcept: TExceptHandler);
+      procedure GetArticle(AArticleId: Integer; AArticle: TMArticle);
       { Proceso para agregar articulos al servidor }
       procedure AddArticle(ATitle, ADesc: string; AStream: TBytesStream);
 
@@ -106,19 +104,16 @@ begin
       article := nil;
       exp := nil;
 
-      BeginRead(TMREWS_MSServer);
-      MSServer.GetArticles(list, exp);
-      EndRead(TMREWS_MSServer);
+      SMGetArticles(list, exp);
       cut_process := exp.CodError <> 0;
 
       TThread.Sleep(500);
 
       if not cut_process then
       begin
-        exp.Free;
         for I := list.Count - 1 downto 0 do
         begin
-          GetArticle(list.Items[I], article, exp);
+          GetArticle(list.Items[I], article);
         end;
         exit; // goto finally
       end;
@@ -141,23 +136,30 @@ begin
   th.Start;
 end;
 
-procedure TCBoard.GetArticle(AArticleId: Integer; AArticle: TMArticle;
-                            AExcept: TExceptHandler);
+procedure TCBoard.GetArticle(AArticleId: Integer; AArticle: TMArticle);
+var
+  exp: TExceptHandler;
 begin
   try
-    BeginRead(TMREWS_MSServer);
-    MSServer.GetArticle(AArticleId, AArticle, AExcept);
-    EndRead(TMREWS_MSServer);
+    SMGetArticle(AArticleId, AArticle, exp);
+
+    if exp.CodError <> 0 then exit;
+
     TThread.Sleep(500);
     TThread.Synchronize(nil,
     procedure
     begin         // Manegar posibles errores [FALTA]
+      BeginWrite(TMREWS_CBoard);
       PushArticle(AArticle);
+      EndWrite(TMREWS_CBoard);
     end);
   finally
-    AArticle.Destroy;
-    AArticle := nil;
-    FreeAndNil(AExcept);
+    if Assigned(AArticle) then
+    begin
+      AArticle.Destroy;
+      AArticle := nil;
+    end;
+    exp.Free;
   end;
 end;
 
@@ -185,9 +187,7 @@ begin
     exp: TExceptHandler;
   begin
     try
-      BeginRead(TMREWS_MSServer);
-      MSServer.PushArticle(0, ATitle, ADesc, B64Encode(AStream), exp);
-      EndRead(TMREWS_MSServer);
+      SMPushArticle(0, ATitle, ADesc, B64Encode(AStream), exp);
 
       TThread.Sleep(1000);
 
@@ -226,21 +226,15 @@ begin
   th := TThread.CreateAnonymousThread(
   procedure
   var
-    exp: TExceptHandler;
     article: TMArticle;
   begin
-    try
-      if Assigned(AExcept) then FreeAndNil(AExcept);
-      article := nil;
-      // Falta manejar la posible excepcion que viene del Microservice.
-      case ANotify.NotifyType of
-      ntNewArticle:
-        begin
-          GetArticle(ANotify.InfoId, article, exp);
-        end;
+    article := nil;
+    // Falta manejar la posible excepcion que viene del Microservice.
+    case ANotify.NotifyType of
+    ntNewArticle:
+      begin
+        GetArticle(ANotify.InfoId, article);
       end;
-    finally
-      if Assigned(exp) then exp.Free;
     end;
   end);
   th.FreeOnTerminate := True;

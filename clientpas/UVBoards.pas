@@ -69,10 +69,6 @@ type
     procedure ClearVSB;
     function GetOffsetItem: Single;
 
-    { AddArticle region }
-
-    { AddArticle endregion }
-
     { Apply common events }
     procedure FocusUnFocusLabel(Sender: TObject);
     procedure CallDispatchEdit(Sender: TObject);
@@ -112,17 +108,15 @@ begin
   btnLoadPhoto.OnMouseLeave := imgArticleAMouseLeave;
 
   { settings }
-  BeginRead(TMREWS_CBoard);
+
   CBoard.PushArticle := PushArticleIntoVSB;
   CBoard.DispatchMessage := ShowDispatchMessage;
   CBoard.ChangeTab := GotoTabsButton;
-  EndRead(TMREWS_CBoard);
+
   gViewMgr.Loading := Loading;
 
   { Initializer }
-  BeginRead(TMREWS_CBoard);
   CBoard.GetArticles;
-  EndRead(TMREWS_CBoard);
 end;
 
 procedure TfrmVBoards.FormDestroy(Sender: TObject);
@@ -279,9 +273,9 @@ var
 begin
   stream := TBytesStream.Create;
   imgArticleA.Bitmap.SaveToStream(stream);
-  BeginRead(TMREWS_CBoard);
+
   CBoard.AddArticle(lblTitleA.Text, lblDescA.Text, stream);
-  EndRead(TMREWS_CBoard);
+
 end;
 
 procedure TfrmVBoards.GotoTabsButton(Sender: TObject);
@@ -330,9 +324,9 @@ var
   lbl: TLabel;
 begin
   lbl := TLabel(Sender);
-  BeginRead(TMREWS_CBoard);
+
   CBoard.LabelBackup := lbl;
-  EndRead(TMREWS_CBoard);
+
   lyDispatchEdit.Visible := True;
   mmTextAA.SetFocus;
 end;
@@ -342,7 +336,7 @@ var
   btn: TButton;
 begin
   btn := TButton(Sender);
-  BeginRead(TMREWS_CBoard);
+
   if (btn.Tag = 6) then     // Cancel
   begin
     if CBoard.LabelBackup.Tag = 5 then  // title
@@ -357,7 +351,7 @@ begin
     else if CBoard.LabelBackup.Tag = 55 then  // description
       lblDescA.Text := Trim(mmTextAA.Text);
   end;
-  EndRead(TMREWS_CBoard);
+
 
   lyDispatchEdit.Visible := False;
   mmTextAA.Text := '';

@@ -261,8 +261,10 @@ methods.push_article = async (req) => {
         ]);
 
         if (result) {
-            let art_last_id = GetLastArticleByOwner(req.body.ac_id);
-            db.InternalPushGNotification([req.body.ac_id, art_last_id]);
+            let art = await db.GetLastArticleByOwner(req.body.ac_id);
+            // type gNotify: newArticle 0
+            let res = await db.InternalPushGNotification([req.body.ac_id, 0, art.ar_id]);
+            if (res) console.log('Exito!');
         }
 
         return result ? {

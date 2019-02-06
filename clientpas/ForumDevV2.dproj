@@ -103,7 +103,6 @@
             <Form>frmVSession</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="UMSServer.pas"/>
         <DCCReference Include="UExceptHandler.pas"/>
         <DCCReference Include="UHelper.pas"/>
         <DCCReference Include="UCSession.pas"/>
@@ -118,10 +117,9 @@
             <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="UCBoard.pas"/>
-        <DCCReference Include="UMSNotify.pas"/>
-        <DCCReference Include="UMSCommon.pas"/>
         <DCCReference Include="UMNotification.pas"/>
         <DCCReference Include="USynchronizer.pas"/>
+        <DCCReference Include="UServerMethods.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

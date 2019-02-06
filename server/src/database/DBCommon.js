@@ -335,8 +335,8 @@ class DBCommon
     async GetLastArticleByOwner(id_usr) {
         try {
             if (!id_usr) throw "known't";
-            let rows = await this.ExecQry("SELECT `gnt_id` FROM `gnotify` WHERE `ac_id`="+id_usr+
-                                          " ORDER BY `gnt_id` DESC LIMIT 1;");
+            let rows = await this.ExecQry("SELECT `ar_id` FROM `articles` WHERE `ac_id`="+id_usr+
+                                          " ORDER BY `ar_id` DESC LIMIT 1;");
             if (!rows.length)
                 throw new PersonalException(`Empty articles.`, 'GetArticles', '-10');
             return rows[0];
@@ -366,13 +366,14 @@ class DBCommon
 
     async GetGlobalNotifications(offset) {
         try {
-            if (!id_user || !offset) throw "know't";
+            if (!offset) throw "know't";
             let rows = await this.ExecQry("SELECT * FROM `gnotify` WHERE `gnt_id` > "+offset+";");
             if (!rows.length)
-                throw new PersonalException(`Not found unotify id: ${id_user}.`, 'GetNotifications', '-12');
+                throw new PersonalException(`Not found notify`, 'GetNotifications', '-12');
             return rows;
         } catch (err) {
             if (!(err instanceof PersonalException)) {
+                console.log(err);
                 throw "know't";
             }
             throw err;

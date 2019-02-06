@@ -10,9 +10,6 @@ uses
   UHelper,
   USynchronizer,
   // Microservices
-  UMSCommon,
-  UMSServer,
-  UMSNotify,
   // Models
   UMUser,
   // Views
@@ -55,15 +52,15 @@ implementation
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   { Initialize Microservices }
-  MSCommon := TMSCommon.Create;
-  MSServer := TMSServer.Create;
-  MSNotify := TMSNotify.Create; // This is a thread.
 
   { Initialize Managers }
   gViewMgr := TViewMgr.Create;
     { Set closure }
   gViewMgr.LaunchView := CLLaunchView;
   gViewMgr.PromptMessage := CLPromptMessage;
+
+  { Initialize Globals }
+  gMUser := TMUser.Create(True);
 
   { Settings }
   lyMainPortView.SetFocus;
@@ -73,7 +70,6 @@ begin
   CFrontend := TCFrontend.Create;
   CBoard := TCBoard.Create;
   { Set closure to microservices }
-  MSNotify.SendNotify := CBoard.ReceivedNotification;
 
   { Getting Begin View }
   gViewMgr.GetView(TfrmVSession, lyMainPortView, FActiveForm, nil, 'lyVSession');
@@ -82,14 +78,14 @@ end;
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
   { Destructing Microservices }
-  MSNotify.Destroy;
-  MSServer.Destroy;
-  MSCommon.Destroy;
 
   { Destructing Controllers }
   CSession.Destroy;
   CFrontend.Destroy;
   CBoard.Destroy;
+
+  { Destructing globals }
+  gMUser.Destroy;
 
   { Destructing Managers }
   gViewMgr.Destroy;
@@ -112,21 +108,12 @@ begin
   case AViewType of
     vtStartSession:
     begin
-      { Started Microservice Notify }
-      BeginRead(TMREWS_gMUser);
-      MSNotify.CurrentId := gMUser.Id;
-      MSNotify.CurrentToken := gMUser.Token;
-      EndRead(TMREWS_gMUser);
-      MSNotify.Start;
-
       { Launch view }
       gViewMgr.GetView(TfrmVFrontend, lyMainPortView, FActiveForm, nil, 'lyVFrontend');
     end;
     vtLogout:
     begin
-      ResetMicroservice(MSNotify);
-      MSServer.ResetMicroservice;
-
+      ResetUserSession(gMUser);
       { Launch view }
       gViewMgr.GetView(TfrmVSession, lyMainPortView, FActiveForm, nil, 'lyVSession');
     end;

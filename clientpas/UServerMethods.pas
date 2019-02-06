@@ -1,86 +1,80 @@
-unit UMSServer;
+unit UServerMethods;
 
 interface
 
 uses
   System.Classes, System.SysUtils, System.JSON, System.Generics.Collections,
-  REST.Client, REST.Types, IPPeerClient, UExceptHandler,
-  // Helpers
-  UHelper,
+  REST.Client, REST.Types, IPPeerClient,
+  // Helper
+  UExceptHandler,
   USynchronizer,
-  // Microservices
-  UMSCommon,
+  UHelper,
   // Models
-  UMUser,
-  UMArticle;
+  UMArticle,
+  UMUser;
 
-type
-  TMSServer = class(TObject)
-    public
-      constructor Create;
-      destructor Destroy; virtual;
+{ Server Query }
+procedure RRequest(AMethod: string; const ABody: TJSONObject; out ARes: TJSONObject);
 
-      procedure OnCreate;
-      procedure OnClose;
-      procedure ResetMicroservice;
-
-      { Server methods }
-      // Session
-      procedure LogInUser(ANickname, APassword: string; out AExcept: TExceptHandler);
-      procedure SignInUser(ANickname, ALastname, AFirstname, AEmail, APassword, AImg64: string;
+{ All server methods have prefix <SM> }
+procedure SMLogInUser(ANickname, APassword: string; out AExcept: TExceptHandler);
+procedure SMSignInUser(ANickname, ALastname, AFirstname, AEmail, APassword, AImg64: string;
                            out AExcept: TExceptHandler);
-      // Articles
-      procedure PushArticle(ARange: Integer; ATitle, ADesc, AImage: string;
+procedure SMPushArticle(ARange: Integer; ATitle, ADesc, AImage: string;
                             out AExcept: TExceptHandler);
-      procedure GetArticles(out AList: TList<Integer>; out AExcept: TExceptHandler);
-      procedure GetArticle(AArticleId: Integer; out AArticle: TMArticle;
+procedure SMGetArticles(out AList: TList<Integer>; out AExcept: TExceptHandler);
+procedure SMGetArticle(AArticleId: Integer; out AArticle: TMArticle;
                             out AExcept: TExceptHandler);
+function SMGetUserPhoto(AId: Integer; out AStream: TBytesStream): Integer;
 
-      // Getters
-      function GetUserPhoto(AId: Integer; out AStream: TBytesStream): Integer;
-  end;
-
-var
-  MSServer: TMSServer;
-  // Microservice Synchronizer Shared Memory SAFE.
+const
+  URL: string = 'http://localhost:3000/api/sm/';
 
 implementation
 
-constructor TMSServer.Create;
+procedure RRequest(AMethod: string; const ABody: TJSONObject; out ARes: TJSONObject);
+var
+  client: TRESTClient;
+  request: TRESTRequest;
+  response: TRESTResponse;
+  ResultRes: TJSONObject;
+  codError: Integer;
 begin
-  OnCreate;
-  TMREWS_MSServer := TMultiReadExclusiveWriteSynchronizer.Create;
-  inherited;
+  client := TRESTClient.Create('');
+  request := TRESTRequest.Create(nil);
+  response := TRESTResponse.Create(nil);
+  client.BaseURL := URL;
+  request.Client := client;
+  request.Response := response;
+  request.Method := rmPOST;
+  request.Resource := AMethod;
+  request.SynchronizedEvents := False;
+  request.Timeout := 10000;
+  request.Body.Add(ABody);
+
+  try
+    try
+      request.Execute;
+      if not response.JSONValue.TryGetValue('codError', codError) then
+        raise Exception.Create('Invalid server response');
+
+      ResultRes := TJSONObject(response.JSONValue.Clone);
+    except
+      on e: Exception do
+      begin
+        ResultRes := TJSONObject.Create;
+        ResultRes.AddPair('codError', '-999');
+      end;
+    end;
+  finally
+    ARes := ResultRes; // Return Response;
+    request.Free;
+    response.Free;
+    client.Free;
+  end;
 end;
 
-destructor TMSServer.Destroy;
-begin
-  OnClose;
-
-  if Assigned(TMREWS_MSServer) then
-    TMREWS_MSServer.Free;
-  inherited;
-end;
-
-procedure TMSServer.OnCreate;
-begin
-  gMUser := TMUser.Create(True);
-end;
-
-procedure TMSServer.OnClose;
-begin
-  if Assigned(gMUser) then
-    gMUser.Destroy;
-end;
-
-procedure TMSServer.ResetMicroservice;
-begin
-  OnClose;
-  OnCreate;
-end;
-
-procedure TMSServer.LogInUser(ANickname, APassword: string;
-  out AExcept: TExceptHandler);
+procedure SMLogInUser(ANickname, APassword: string; out AExcept: TExceptHandler);
 var
   body, res: TJSONObject;
   stream: TBytesStream;
@@ -92,10 +86,7 @@ begin
   body := TJSONObject.Create;
   body.AddPair('nickname', ANickname);
   body.AddPair('password', APassword);
-
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('login', body, res);
-  EndRead(TMREWS_MSCommon);
+  RRequest('login', body, res);
 
   codError := StrToInt(res.GetValue('codError').Value);
   AExcept.CodError := codError;
@@ -108,7 +99,7 @@ begin
       gMUser.Nickname := ANickname;
       gMUser.Password := APassword;
       gMUser.Token := LowerCase(res.GetValue('token').Value);
-      imgce := GetUserPhoto(gMUser.Id, stream);
+      imgce := SMGetUserPhoto(gMUser.Id, stream);
       // Falta gestionar en tal caso que no posea imagen
       gMUser.StreamImg := stream;
     finally
@@ -120,8 +111,8 @@ begin
   end;
 end;
 
-procedure TMSServer.SignInUser(ANickname, ALastname, AFirstname, AEmail,
-  APassword, AImg64: string; out AExcept: TExceptHandler);
+procedure SMSignInUser(ANickname, ALastname, AFirstname, AEmail, APassword, AImg64: string;
+                           out AExcept: TExceptHandler);
 var
   body, res: TJSONObject;
   codError: Integer;
@@ -135,10 +126,7 @@ begin
   body.AddPair('email', AEmail);
   body.AddPair('password', APassword);
   body.AddPair('image', AImg64);
-
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('signin', body, res);
-  EndRead(TMREWS_MSCommon);
+  RRequest('signin', body, res);
 
   codError := StrToInt(res.GetValue('codError').Value);
   AExcept.CodError := codError;
@@ -151,36 +139,8 @@ begin
   end;
 end;
 
-function TMSServer.GetUserPhoto(AId: Integer; out AStream: TBytesStream): Integer;
-var
-  body, res: TJSONObject;
-  codError: Integer;
-begin
-  body := TJSONObject.Create;
-  BeginRead(TMREWS_gMUser);
-  body.AddPair('id', IntToStr(gMUser.Id));
-  body.AddPair('token', gMUser.Token);
-  EndRead(TMREWS_gMUser);
-  body.AddPair('id_usr', IntToStr(AId));
-
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('getuserphoto', body, res);
-  EndRead(TMREWS_MSCommon);
-
-  codError := StrToInt(res.GetValue('codError').Value);
-  Result := codError;
-
-  try
-    if codError <> 0 then exit;
-    B64Decode(res.GetValue('image').Value, AStream);
-  finally
-    res.DisposeOf;
-    body.DisposeOf;
-  end;
-end;
-
-procedure TMSServer.PushArticle(ARange: Integer; ATitle, ADesc, AImage: string;
-                                out AExcept: TExceptHandler);
+procedure SMPushArticle(ARange: Integer; ATitle, ADesc, AImage: string;
+                            out AExcept: TExceptHandler);
 var
   body, res: TJSONObject;
   codError: Integer;
@@ -188,17 +148,12 @@ begin
   AExcept := TExceptHandler.Create;
 
   body := TJSONObject.Create;
-  BeginRead(TMREWS_gMUser);
   body.AddPair('ac_id', IntToStr(gMUser.Id));
-  EndRead(TMREWS_gMUser);
   body.AddPair('range', IntToStr(ARange));
   body.AddPair('title', ATitle);
   body.AddPair('description', ADesc);
   body.AddPair('image', AImage);
-
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('pusharticle', body, res);
-  EndRead(TMREWS_MSCommon);
+  RRequest('pusharticle', body, res);
 
   codError := StrToInt(res.GetValue('codError').Value);
   AExcept.CodError := codError;
@@ -211,37 +166,31 @@ begin
   end;
 end;
 
-procedure TMSServer.GetArticles(out AList: TList<Integer>; out AExcept: TExceptHandler);
+procedure SMGetArticles(out AList: TList<Integer>; out AExcept: TExceptHandler);
 var
   body, res, curr: TJSONObject;
   arr: TJSONArray;
-  codError, lengthData, I: Integer;
+  codError, length, I: Integer;
 begin
-  lengthData := 0;
+  length := 0;
   AExcept := TExceptHandler.Create;
-
   body := TJSONObject.Create;
-  BeginRead(TMREWS_gMUser);
   body.AddPair('id', IntToStr(gMUser.Id));
   body.AddPair('token', gMUser.Token);
-  EndRead(TMREWS_gMUser);
   body.AddPair('offset', '0'); // No implementado
-
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('getarticles', body, res);
-  EndRead(TMREWS_MSCommon);
+  RRequest('getarticles', body, res);
 
   codError := StrToInt(res.GetValue('codError').Value);
   AExcept.CodError := codError;
 
   try
     if codError <> 0 then exit;
-    lengthData := StrToInt(res.GetValue('length').Value);
-    if lengthData = 0 then exit;
+    length := StrToInt(res.GetValue('length').Value);
+    if length = 0 then exit;
 
     AList := TList<Integer>.Create;
     arr := TJSONArray(res.GetValue<TJSONArray>('data'));
-    for I := 0 to lengthData - 1 do
+    for I := 0 to length - 1 do
     begin
       curr := TJSONObject(arr.Items[I]);
       AList.Add(StrToInt(curr.GetValue('ar_id').Value));
@@ -252,7 +201,7 @@ begin
   end;
 end;
 
-procedure TMSServer.GetArticle(AArticleId: Integer; out AArticle: TMArticle;
+procedure SMGetArticle(AArticleId: Integer; out AArticle: TMArticle;
                             out AExcept: TExceptHandler);
 var
   body, res, arr: TJSONObject;
@@ -262,16 +211,11 @@ begin
   AExcept := TExceptHandler.Create;
 
   body := TJSONObject.Create;
-
-  BeginRead(TMREWS_gMUser);
   body.AddPair('id', IntToStr(gMUser.Id));
   body.AddPair('token', gMUser.Token);
-  EndRead(TMREWS_gMUser);
   body.AddPair('ar_id', IntToStr(AArticleId));
+  RRequest('getarticle', body, res);
 
-  BeginRead(TMREWS_MSCommon);
-  MSCommon.RRequest('getarticle', body, res);
-  EndRead(TMREWS_MSCommon);
 
   codError := StrToInt(res.GetValue('codError').Value);
   AExcept.CodError := codError;
@@ -293,6 +237,29 @@ begin
     stream.Free;
     res.Free;
     body.Free;
+  end;
+end;
+
+function SMGetUserPhoto(AId: Integer; out AStream: TBytesStream): Integer;
+var
+  body, res: TJSONObject;
+  codError: Integer;
+begin
+  body := TJSONObject.Create;
+  body.AddPair('id', IntToStr(gMUser.Id));
+  body.AddPair('token', gMUser.Token);
+  body.AddPair('id_usr', IntToStr(AId));
+  RRequest('getuserphoto', body, res);
+
+  codError := StrToInt(res.GetValue('codError').Value);
+  Result := codError;
+
+  try
+    if codError <> 0 then exit;
+    B64Decode(res.GetValue('image').Value, AStream);
+  finally
+    res.DisposeOf;
+    body.DisposeOf;
   end;
 end;
 

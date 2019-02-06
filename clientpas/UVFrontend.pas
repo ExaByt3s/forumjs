@@ -66,9 +66,9 @@ var
   nickname: string;
   stream: TBytesStream;
 begin
-  BeginRead(TMREWS_CFrontend);
+
   CFrontend.GetSetting(nickname, stream);
-  EndRead(TMREWS_CFrontend);
+
   crlPhoto.Fill.Bitmap.Bitmap.LoadFromStream(stream);
   lblnickname.Text := nickname;
   stream.Free;

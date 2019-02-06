@@ -7,7 +7,6 @@ uses
   UViewMgr in 'UViewMgr.pas',
   UMUser in 'UMUser.pas',
   UVSession in 'UVSession.pas' {frmVSession},
-  UMSServer in 'UMSServer.pas',
   UExceptHandler in 'UExceptHandler.pas',
   UHelper in 'UHelper.pas',
   UCSession in 'UCSession.pas',
@@ -16,10 +15,9 @@ uses
   UMArticle in 'UMArticle.pas',
   UVBoards in 'UVBoards.pas' {frmVBoards},
   UCBoard in 'UCBoard.pas',
-  UMSNotify in 'UMSNotify.pas',
-  UMSCommon in 'UMSCommon.pas',
   UMNotification in 'UMNotification.pas',
-  USynchronizer in 'USynchronizer.pas';
+  USynchronizer in 'USynchronizer.pas',
+  UServerMethods in 'UServerMethods.pas';
 
 {$R *.res}
 

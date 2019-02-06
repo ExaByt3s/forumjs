@@ -9,8 +9,8 @@ uses
   // Helper
   UHelper,
   USynchronizer,
-  // Microservice
-  UMSServer,
+  // ServerMethods
+  UServerMethods,
   // Views
   UVFrontend;
 
@@ -20,6 +20,7 @@ type
 
   TCSession = class(TObject)
     private
+      { closure views }
       FClearController: CLOSUREClearController;
       FChangeTab: CLOSURETransitionTab;
 
@@ -67,10 +68,8 @@ begin
     exp: TExceptHandler;
     pass_hash: string;
   begin
-    BeginRead(TMREWS_MSServer);
     pass_hash := HASH512(APassword);
-    MSServer.LogInUser(LowerCase(ANickname), pass_hash, exp);
-    EndRead(TMREWS_MSServer);
+    SMLogInUser(LowerCase(ANickname), pass_hash, exp);
 
     TThread.Sleep(SLEEP_PER_PROCCESS); // Real sleep 500
 
@@ -107,12 +106,10 @@ begin
     exp: TExceptHandler;
     pass_hash: string;
   begin
-    BeginRead(TMREWS_MSServer);
     pass_hash := HASH512(APassword);
-    MSServer.SignInUser(LowerCase(ANickname), LowerCase(ALastName),
-                        LowerCase(AFirstName), LowerCase(AEmail), LowerCase(pass_hash),
-                        B64Encode(AStream), exp);
-    EndRead(TMREWS_MSServer);
+    SMSignInUser(LowerCase(ANickname), LowerCase(ALastName),
+                 LowerCase(AFirstName), LowerCase(AEmail), LowerCase(pass_hash),
+                 B64Encode(AStream), exp);
 
     TThread.Sleep(SLEEP_PER_PROCCESS); // Real sleep 500
 

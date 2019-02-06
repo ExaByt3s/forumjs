@@ -18,12 +18,6 @@ procedure B64Decode(const ASource: string; out AStream: TBytesStream);
 // Hash512
 function HASH512(const AText: string): string;
 
-// Facilitar la forma en que se sync una variable global altamente concurrida.
-procedure BeginRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
-procedure EndRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
-procedure BeginWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
-procedure EndWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
-
 implementation
 
 function B64Encode(AStream: TBytesStream): string;
@@ -46,26 +40,6 @@ begin
   hash := THashSHA2.GetHashString(LowerCase(AText),
     THashSHA2.TSHA2Version.SHA512);
   Result := LowerCase(hash);
-end;
-
-procedure BeginRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
-begin
-  ALock.BeginRead;
-end;
-
-procedure EndRead(var ALock: TMultiReadExclusiveWriteSynchronizer);
-begin
-  ALock.EndRead;
-end;
-
-procedure BeginWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
-begin
-  ALock.BeginWrite;
-end;
-
-procedure EndWrite(var ALock: TMultiReadExclusiveWriteSynchronizer);
-begin
-  ALock.EndRead;
 end;
 
 end.
