@@ -61,13 +61,14 @@ type
     procedure imgArticleAMouseLeave(Sender: TObject);
     procedure btnLoadPhotoEnter(Sender: TObject);
   private
-    { Private declarations }
+    FArr_Articles: array[0..20] of TLayout;
   public
 
     { Helper for Push Article into VertScrollBox }
     procedure GetScrollContent(out ASContent: TScrollContent);
     procedure ClearVSB;
-    function GetOffsetItem: Single;
+    procedure GetArticleInVsb; { TLayout }
+    procedure MoveArticleForANew;
 
     { Apply common events }
     procedure FocusUnFocusLabel(Sender: TObject);
@@ -130,21 +131,15 @@ end;
 procedure TfrmVBoards.PushArticleIntoVSB(const AArticle: TMArticle);
 var
   template: TLayout;
-  offset: Single;
   I, II: Integer;
   // templatechild
   bmp: TImage;
   td_label: TLabel;
 begin
-  offset := 0.0;
   template := TLayout(lyArticleTemplate.Clone(lyArticleTemplate));
   template.Tag := CBoard.TagCount;
+  template.Position.Y := 10;
 
-  if CBoard.TagCount > 10 then
-    offset := GetOffsetItem;
-
-  offset := offset + 10.0; // N distance entre articles.
-  template.Position.Y := offset;
   CBoard.TagCount := CBoard.TagCount + 1;
 
   for I := template.ChildrenCount - 1 downto 0 do
@@ -173,6 +168,11 @@ begin
   end;
 
   vsbBoard.AddObject(TFmxObject(template));
+
+  { Moviendo articles }
+  if CBoard.TagCount > 10 then
+    MoveArticleForANew;
+
   vsbBoard.UpdateEffects;
 end;
 
@@ -220,25 +220,6 @@ begin
   vsbBoard.UpdateEffects;
 end;
 
-function TfrmVBoards.GetOffsetItem: Single;
-var
-  I: Integer;
-  layout: TLayout;
-  RSContent: TScrollContent;
-begin
-  Result := 0.0;
-  GetScrollContent(RSContent);
-  for I := RSContent.ControlsCount - 1 downto 0 do
-  begin
-    if RSContent.Controls[I].Tag = CBoard.TagCount - 1 then
-    begin
-      layout := TLayout(RSContent.Controls[I]);
-      Result := layout.Position.Y + layout.Height; // bottom
-      break;
-    end;
-  end;
-end;
-
 procedure TfrmVBoards.GetScrollContent(out ASContent: TScrollContent);
 var
   I: Integer;
@@ -275,7 +256,6 @@ begin
   imgArticleA.Bitmap.SaveToStream(stream);
 
   CBoard.AddArticle(lblTitleA.Text, lblDescA.Text, stream);
-
 end;
 
 procedure TfrmVBoards.GotoTabsButton(Sender: TObject);
@@ -361,6 +341,40 @@ procedure TfrmVBoards.Loading(AActive: Boolean);
 begin
   lyLoading.Visible := AActive;
   AniIndicator1.Enabled := AActive;
+end;
+
+procedure TfrmVBoards.GetArticleInVsb;
+var
+  I, II: Integer;
+  sc: TScrollContent;
+begin
+  GetScrollContent(sc);
+
+  for I := 10 to CBoard.TagCount-1 do
+  begin
+    for II := 0 to sc.ControlsCount-1 do
+    begin
+      if sc.Controls[II].Tag = I then
+      begin
+        FArr_Articles[I-10] := sc.Controls[II] as TLayout;
+        break;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmVBoards.MoveArticleForANew;
+var
+  I, last: Integer;
+begin
+  GetArticleInVsb;
+  last := CBoard.TagCount;
+  for I := 10 to last-1 do
+  begin
+    if I = last-1 then continue;
+    FArr_Articles[I-10].Position.Y := FArr_Articles[I-10].Position.Y +
+                                    FArr_Articles[I-10].Height + 10.0;
+  end;
 end;
 
 end.

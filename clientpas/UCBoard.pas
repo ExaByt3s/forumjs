@@ -111,7 +111,7 @@ begin
 
       if not cut_process then
       begin
-        for I := list.Count - 1 downto 0 do
+        for I := 0 to list.Count - 1 do
         begin
           GetArticle(list.Items[I], article);
         end;

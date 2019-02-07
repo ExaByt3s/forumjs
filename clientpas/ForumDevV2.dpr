@@ -17,7 +17,8 @@ uses
   UCBoard in 'UCBoard.pas',
   UMNotification in 'UMNotification.pas',
   USynchronizer in 'USynchronizer.pas',
-  UServerMethods in 'UServerMethods.pas';
+  UServerMethods in 'UServerMethods.pas',
+  UMisc in 'UMisc.pas';
 
 {$R *.res}
 

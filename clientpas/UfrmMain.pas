@@ -9,7 +9,6 @@ uses
   // Helpers
   UHelper,
   USynchronizer,
-  // Microservices
   // Models
   UMUser,
   // Views
@@ -51,8 +50,6 @@ implementation
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  { Initialize Microservices }
-
   { Initialize Managers }
   gViewMgr := TViewMgr.Create;
     { Set closure }
@@ -77,8 +74,6 @@ end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
-  { Destructing Microservices }
-
   { Destructing Controllers }
   CSession.Destroy;
   CFrontend.Destroy;
